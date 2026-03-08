@@ -1,21 +1,41 @@
-/* ---------------- GLOBAL ---------------- */
+/* ============================= */
+/* GLOBAL RESET */
+/* ============================= */
 
-html, body {
-    height:100%;
+*{
+    box-sizing:border-box;
 }
 
+html,body{
+    height:100%;
+    margin:0;
+    padding:0;
+}
+
+/* ============================= */
+/* DARK BACKGROUND */
+/* ============================= */
+
 body{
-    font-family:'Roboto', sans-serif !important;
-    background:#000 !important;   /* force black background */
+    font-family:'Roboto',sans-serif;
+    background-color:#000;
     color:#e2e8f0;
 }
 
-/* ensure any bg-gradient class is black */
+/* override any bootstrap background classes */
+
 .bg-gradient{
-    background:#000 !important;
+    background-color:#000 !important;
 }
 
-/* ---------------- NAVBAR ---------------- */
+.container{
+    position:relative;
+    z-index:1;
+}
+
+/* ============================= */
+/* NAVBAR */
+/* ============================= */
 
 .navbar{
     background:#111 !important;
@@ -24,36 +44,68 @@ body{
 
 .navbar-brand{
     font-weight:700;
+    letter-spacing:0.5px;
 }
 
 .nav-link{
     color:#e2e8f0 !important;
+    font-weight:500;
 }
 
 .nav-link:hover{
     color:#38bdf8 !important;
 }
 
-/* ---------------- BRAND ICON ---------------- */
+.nav-link.active{
+    color:#38bdf8 !important;
+}
+
+/* ============================= */
+/* BRAND ICON */
+/* ============================= */
 
 .brand-badge{
     font-size:1.5rem;
 }
 
-/* ---------------- CARDS ---------------- */
+/* ============================= */
+/* CARDS */
+/* ============================= */
 
 .card{
     border:none;
-}
-
-.glass{
-    background:rgba(255,255,255,0.05);
-    backdrop-filter:blur(12px);
-    border:1px solid rgba(255,255,255,0.08);
     border-radius:16px;
 }
 
-/* ---------------- INPUTS (UNCHANGED) ---------------- */
+/* glass style used in pages */
+
+.glass{
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+/* ============================= */
+/* TEXT */
+/* ============================= */
+
+h1,h2,h3,h4,h5,h6{
+    color:#f8fafc;
+}
+
+.text-light{
+    color:#e2e8f0 !important;
+}
+
+.text-muted{
+    color:#94a3b8 !important;
+}
+
+/* ============================= */
+/* FORMS */
+/* ============================= */
+
+/* keep inputs white */
 
 .form-control,
 .form-select{
@@ -62,11 +114,17 @@ body{
 }
 
 .form-control:focus{
-    border-color:#38bdf8;
+    border-color:#3b82f6;
     box-shadow:none;
 }
 
-/* ---------------- BUTTONS ---------------- */
+/* ============================= */
+/* BUTTONS */
+/* ============================= */
+
+.btn{
+    border-radius:10px;
+}
 
 .btn-success{
     background:#22c55e;
@@ -86,13 +144,16 @@ body{
     background:#2563eb;
 }
 
-/* ---------------- BADGE CARDS ---------------- */
+/* ============================= */
+/* BADGES PAGE */
+/* ============================= */
 
 .badge-card{
     background:rgba(255,255,255,0.05);
     border:1px solid rgba(255,255,255,0.1);
     border-radius:14px;
     padding:20px;
+    text-align:center;
     transition:0.3s;
 }
 
@@ -100,7 +161,27 @@ body{
     transform:translateY(-4px);
 }
 
-/* ---------------- GOAL CARDS ---------------- */
+.badge-icon{
+    font-size:3rem;
+}
+
+.badge-title{
+    font-weight:600;
+    margin-bottom:5px;
+}
+
+.badge-desc{
+    color:#cbd5f5;
+}
+
+.badge-date{
+    color:#94a3b8;
+    font-size:0.85rem;
+}
+
+/* ============================= */
+/* GOALS PAGE */
+/* ============================= */
 
 .goal-card{
     background:rgba(255,255,255,0.05);
@@ -113,7 +194,9 @@ body{
     transform:translateY(-4px);
 }
 
-/* ---------------- PROGRESS ---------------- */
+/* ============================= */
+/* PROGRESS BARS */
+/* ============================= */
 
 .progress{
     height:10px;
@@ -125,7 +208,18 @@ body{
     background:#22c55e;
 }
 
-/* ---------------- AVATAR FIX ---------------- */
+/* ============================= */
+/* LIST GROUP */
+/* ============================= */
+
+.list-group-item{
+    background:transparent;
+    border-color:rgba(255,255,255,0.08);
+}
+
+/* ============================= */
+/* AVATAR FIX */
+/* ============================= */
 
 .avatar,
 .profile-avatar,
@@ -136,13 +230,9 @@ body{
     object-fit:cover;
 }
 
-/* ---------------- TEXT ---------------- */
-
-.text-muted{
-    color:#94a3b8 !important;
-}
-
-/* ---------------- ANIMATION ---------------- */
+/* ============================= */
+/* ANIMATIONS */
+/* ============================= */
 
 .animate-in{
     opacity:0;
@@ -156,4 +246,20 @@ body{
         opacity:1;
         transform:translateY(0);
     }
+}
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
+@media (max-width:768px){
+
+    h1{
+        font-size:2rem;
+    }
+
+    .badge-icon{
+        font-size:2.4rem;
+    }
+
 }
