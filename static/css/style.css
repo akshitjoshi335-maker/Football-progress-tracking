@@ -64,8 +64,11 @@ body{
 /* BRAND ICON */
 /* ============================= */
 
-.brand-badge{
-    font-size:1.5rem;
+
+}.brand-badge img{
+    width:24px;
+    height:24px;
+    object-fit:contain;
 }
 
 /* ============================= */
@@ -263,3 +266,4 @@ h1,h2,h3,h4,h5,h6{
     }
 
 }
+
