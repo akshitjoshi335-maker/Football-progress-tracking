@@ -1,39 +1,36 @@
 /* ---------------- GLOBAL ---------------- */
 
-body{
-    font-family:'Roboto',sans-serif;
-    background: linear-gradient(135deg,#0f172a,#020617);
-    color:#e2e8f0;
-    min-height:100vh;
+html, body {
+    height:100%;
 }
 
+body{
+    font-family:'Roboto', sans-serif !important;
+    background:#000 !important;   /* force black background */
+    color:#e2e8f0;
+}
+
+/* ensure any bg-gradient class is black */
 .bg-gradient{
-    background: linear-gradient(135deg,#0f172a,#020617);
+    background:#000 !important;
 }
 
 /* ---------------- NAVBAR ---------------- */
 
 .navbar{
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(10px);
+    background:#111 !important;
     border-bottom:1px solid rgba(255,255,255,0.08);
 }
 
 .navbar-brand{
     font-weight:700;
-    letter-spacing:0.5px;
 }
 
 .nav-link{
     color:#e2e8f0 !important;
-    font-weight:500;
 }
 
 .nav-link:hover{
-    color:#38bdf8 !important;
-}
-
-.nav-link.active{
     color:#38bdf8 !important;
 }
 
@@ -50,15 +47,13 @@ body{
 }
 
 .glass{
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(12px);
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(12px);
     border:1px solid rgba(255,255,255,0.08);
     border-radius:16px;
 }
 
-/* ---------------- FORMS ---------------- */
-
-/* KEEP INPUTS WHITE */
+/* ---------------- INPUTS (UNCHANGED) ---------------- */
 
 .form-control,
 .form-select{
@@ -67,50 +62,35 @@ body{
 }
 
 .form-control:focus{
-    box-shadow:none;
     border-color:#38bdf8;
+    box-shadow:none;
 }
 
 /* ---------------- BUTTONS ---------------- */
 
 .btn-success{
-    background: linear-gradient(90deg,#22c55e,#4ade80);
+    background:#22c55e;
     border:none;
 }
 
 .btn-success:hover{
-    background: linear-gradient(90deg,#16a34a,#22c55e);
+    background:#16a34a;
 }
 
 .btn-primary{
-    background: linear-gradient(90deg,#3b82f6,#60a5fa);
+    background:#3b82f6;
     border:none;
 }
 
 .btn-primary:hover{
-    background: linear-gradient(90deg,#2563eb,#3b82f6);
+    background:#2563eb;
 }
 
-/* ---------------- TEXT ---------------- */
-
-.text-light{
-    color:#e2e8f0 !important;
-}
-
-.text-muted{
-    color:#94a3b8 !important;
-}
-
-/* ---------------- BADGES PAGE ---------------- */
+/* ---------------- BADGE CARDS ---------------- */
 
 .badge-card{
-    background: linear-gradient(
-        135deg,
-        rgba(54,162,235,0.15),
-        rgba(76,175,80,0.15)
-    );
-
-    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
     border-radius:14px;
     padding:20px;
     transition:0.3s;
@@ -118,40 +98,15 @@ body{
 
 .badge-card:hover{
     transform:translateY(-4px);
-    border-color:rgba(54,162,235,0.3);
 }
 
-.badge-icon{
-    font-size:3rem;
-}
-
-.badge-title{
-    color:white;
-    font-weight:600;
-}
-
-.badge-desc{
-    color:#cbd5f5;
-}
-
-.badge-date{
-    color:#94a3b8;
-    font-size:0.85rem;
-}
-
-/* ---------------- GOALS ---------------- */
+/* ---------------- GOAL CARDS ---------------- */
 
 .goal-card{
-    background: linear-gradient(
-        135deg,
-        rgba(59,130,246,0.15),
-        rgba(34,197,94,0.15)
-    );
-
-    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
     border-radius:14px;
     padding:20px;
-    transition:0.3s;
 }
 
 .goal-card:hover{
@@ -163,18 +118,11 @@ body{
 .progress{
     height:10px;
     border-radius:10px;
-    background:rgba(255,255,255,0.1);
+    background:#222;
 }
 
 .progress-bar{
-    background:linear-gradient(90deg,#38bdf8,#22c55e);
-}
-
-/* ---------------- LIST GROUP ---------------- */
-
-.list-group-item{
-    background:transparent;
-    border-color:rgba(255,255,255,0.08);
+    background:#22c55e;
 }
 
 /* ---------------- AVATAR FIX ---------------- */
@@ -188,7 +136,13 @@ body{
     object-fit:cover;
 }
 
-/* ---------------- ANIMATIONS ---------------- */
+/* ---------------- TEXT ---------------- */
+
+.text-muted{
+    color:#94a3b8 !important;
+}
+
+/* ---------------- ANIMATION ---------------- */
 
 .animate-in{
     opacity:0;
@@ -198,24 +152,8 @@ body{
 }
 
 @keyframes fadeInUp{
-
     to{
         opacity:1;
         transform:translateY(0);
     }
-
-}
-
-/* ---------------- MOBILE ---------------- */
-
-@media (max-width:768px){
-
-    h1{
-        font-size:2rem;
-    }
-
-    .badge-icon{
-        font-size:2.5rem;
-    }
-
 }
