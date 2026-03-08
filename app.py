@@ -562,34 +562,47 @@ def logout():
 
 @app.route('/delete/<int:session_id>', methods=['POST'])
 def delete_session(session_id):
-    # ensure user is logged in and only allow deleting own sessions
+
     if 'user_id' not in session:
         return redirect(url_for('login'))
+
     user_id = session['user_id']
     conn = get_db_connection()
-    row = conn.execute('SELECT * FROM sessions WHERE id = ? AND user_id = ?', (session_id, user_id)).fetchone()
+
+    row = conn.execute(
+        'SELECT * FROM sessions WHERE id = ? AND user_id = ?',
+        (session_id, user_id)
+    ).fetchone()
+
     if not row:
         conn.close()
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.is_json:
+
+        # AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return jsonify({'deleted': False}), 404
+
         flash('Session not found', 'danger')
         return redirect(url_for('index'))
 
-    # capture data to allow undo/restore
-    session_data = {
-        'date': row['date'],
-        'drill': row['drill'],
-        'duration': row['duration'],
-        'notes': row['notes']
-    }
+    # store session data for undo
+    session_data = dict(row)
 
-    conn.execute('DELETE FROM sessions WHERE id = ? AND user_id = ?', (session_id, user_id))
+    conn.execute(
+        'DELETE FROM sessions WHERE id = ? AND user_id = ?',
+        (session_id, user_id)
+    )
+
     conn.commit()
     conn.close()
 
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.is_json:
-        return jsonify({'deleted': True, 'session': session_data})
+    # if called via JS fetch
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({
+            'deleted': True,
+            'session': session_data
+        })
 
+    # normal form submit
     flash('Session deleted', 'success')
     return redirect(url_for('index'))
 
@@ -617,3 +630,4 @@ def restore_session():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
