@@ -1,141 +1,159 @@
-/* ------------------------
+/* =========================
 GLOBAL
------------------------- */
+========================= */
 
-body{
-background:#0b0b0b;
-color:#ffffff;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-margin:0;
-padding:0;
+*{
+box-sizing:border-box;
 }
 
-/* ------------------------
+body{
+background:#0b0b0c;
+color:#e8e8e8;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+margin:0;
+padding:0;
+-webkit-font-smoothing:antialiased;
+}
+
+/* text always visible */
+
+h1,h2,h3,h4,h5{
+color:#ffffff;
+font-weight:600;
+}
+
+p,span,label,small{
+color:#cfcfcf;
+}
+
+/* smooth animations */
+
+*{
+transition:all .25s cubic-bezier(.4,0,.2,1);
+}
+
+/* =========================
 NAVBAR
------------------------- */
+========================= */
 
 .navbar{
-background:#111;
-border-bottom:1px solid rgba(255,255,255,0.05);
-padding:6px 16px;
+background:#0e0e0f;
+border-bottom:1px solid rgba(255,255,255,0.06);
+padding:8px 18px;
 min-height:48px;
 }
 
 .navbar-brand{
-font-weight:600;
 font-size:18px;
-color:#fff !important;
+font-weight:600;
+color:white !important;
+letter-spacing:.3px;
 }
 
 .navbar .nav-link{
-color:#ccc !important;
+color:#bfbfbf !important;
 font-size:14px;
-padding:4px 10px;
+margin-left:10px;
 }
 
 .navbar .nav-link:hover{
-color:#fff !important;
+color:white !important;
 }
 
 /* avatar */
 
 .navbar-avatar{
-width:32px;
-height:32px;
+width:30px;
+height:30px;
 border-radius:50%;
 object-fit:cover;
 }
 
-/* ------------------------
+/* =========================
+PAGE HEADER
+========================= */
+
+.page-header{
+text-align:center;
+margin-top:45px;
+margin-bottom:35px;
+}
+
+.page-header h1{
+font-size:44px;
+letter-spacing:-1px;
+}
+
+.page-header p{
+color:#9a9a9a;
+font-size:15px;
+}
+
+/* =========================
 CARDS
------------------------- */
+========================= */
 
 .card{
-background:#121212;
+background:#141414;
+border-radius:18px;
 border:1px solid rgba(255,255,255,0.05);
-border-radius:14px;
-box-shadow:0 10px 30px rgba(0,0,0,0.5);
+padding:24px;
+box-shadow:
+0 10px 25px rgba(0,0,0,.45),
+inset 0 1px rgba(255,255,255,.03);
 }
 
-.card-title{
-font-weight:600;
+.card:hover{
+transform:translateY(-4px);
+box-shadow:
+0 18px 40px rgba(0,0,0,.6),
+inset 0 1px rgba(255,255,255,.04);
 }
 
-/* ------------------------
-FORMS
------------------------- */
+/* =========================
+ANALYTICS GRID
+========================= */
 
-.form-control,
-.form-select{
-background:#ffffff;
-color:#000;
-border-radius:10px;
-border:1px solid #ddd;
+.analytics-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:28px;
+margin-top:30px;
 }
 
-.form-control:focus{
-border-color:#007aff;
-box-shadow:none;
+.analytics-card{
+background:#141414;
+border-radius:18px;
+padding:30px;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 15px 35px rgba(0,0,0,.55);
 }
 
-/* ------------------------
-BUTTONS
------------------------- */
+/* =========================
+METRIC TEXT
+========================= */
 
-.btn{
-border-radius:10px;
+.metric-title{
 font-size:14px;
-padding:6px 14px;
+color:#a0a0a0;
+margin-bottom:6px;
 }
 
-.btn-primary{
-background:#007aff;
-border:none;
+.metric-value{
+font-size:36px;
+font-weight:700;
+color:#ffffff;
 }
 
-.btn-primary:hover{
-background:#0062cc;
-}
-
-.btn-danger{
-background:#ff3b30;
-border:none;
-}
-
-.btn-danger:hover{
-background:#e22c22;
-}
-
-/* ------------------------
-TABLE
------------------------- */
-
-.table{
-color:#ddd;
-}
-
-.table thead{
-color:#fff;
-border-bottom:1px solid rgba(255,255,255,0.1);
-}
-
-.table tbody tr{
-border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.table tbody tr:hover{
-background:rgba(255,255,255,0.03);
-}
-
-/* ------------------------
-RINGS
------------------------- */
+/* =========================
+FITNESS RINGS
+========================= */
 
 .rings{
 display:flex;
 justify-content:center;
-gap:40px;
-margin-bottom:30px;
+gap:50px;
+margin-bottom:40px;
 }
 
 .ring{
@@ -149,26 +167,32 @@ transform:rotate(-90deg);
 }
 
 .ring-bg{
-fill:none;
 stroke:#222;
 stroke-width:12;
+fill:none;
 }
 
 .ring-progress{
-fill:none;
 stroke-width:12;
 stroke-linecap:round;
+fill:none;
 stroke-dasharray:408;
 stroke-dashoffset:408;
-transition:stroke-dashoffset 1.5s ease;
+transition:stroke-dashoffset 1.4s ease;
 }
 
-.ring1{
-stroke:#00ff88;
+/* apple colors */
+
+.ring-green{
+stroke:#30d158;
 }
 
-.ring2{
-stroke:#00aaff;
+.ring-blue{
+stroke:#0a84ff;
+}
+
+.ring-orange{
+stroke:#ff9f0a;
 }
 
 .ring-label{
@@ -180,107 +204,154 @@ text-align:center;
 }
 
 .ring-label h3{
+font-size:24px;
 margin:0;
-font-size:22px;
 }
 
 .ring-label p{
-margin:0;
 font-size:13px;
-color:#aaa;
+color:#a0a0a0;
+margin:0;
 }
 
-/* ------------------------
-UNDO BAR
------------------------- */
+/* =========================
+TABLE
+========================= */
 
-.undo-bar{
-position:fixed;
-bottom:25px;
-left:50%;
-transform:translateX(-50%);
-background:#111;
-color:#fff;
-padding:12px 20px;
-border-radius:30px;
-display:none;
-align-items:center;
-gap:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.6);
-}
-
-.undo-bar button{
-background:#007aff;
-border:none;
-color:#fff;
-padding:5px 12px;
-border-radius:16px;
-}
-
-/* ------------------------
-CHART CARD
------------------------- */
-
-.chart-card{
-background:#121212;
-border-radius:14px;
-padding:20px;
-border:1px solid rgba(255,255,255,0.05);
+.table{
+color:#dcdcdc;
 margin-top:20px;
 }
 
-/* ------------------------
-PROFILE
------------------------- */
-
-.profile-avatar{
-width:80px;
-height:80px;
-border-radius:50%;
-object-fit:cover;
+.table thead{
+border-bottom:1px solid rgba(255,255,255,0.08);
+color:#ffffff;
 }
 
-/* ------------------------
-LOGIN PAGE
------------------------- */
-
-.login-card{
-background:#121212;
-border-radius:14px;
-padding:30px;
-border:1px solid rgba(255,255,255,0.05);
+.table tbody tr{
+border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-/* ------------------------
-SCROLLBAR
------------------------- */
+.table tbody tr:hover{
+background:rgba(255,255,255,0.03);
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.btn{
+border-radius:12px;
+font-size:14px;
+padding:6px 16px;
+}
+
+.btn-primary{
+background:#0a84ff;
+border:none;
+}
+
+.btn-primary:hover{
+background:#0071e3;
+}
+
+.btn-danger{
+background:#ff453a;
+border:none;
+}
+
+.btn-danger:hover{
+background:#d9362e;
+}
+
+/* =========================
+FORMS
+========================= */
+
+.form-control,
+.form-select{
+border-radius:12px;
+border:1px solid #333;
+background:#1c1c1e;
+color:#ffffff;
+}
+
+.form-control:focus{
+border-color:#0a84ff;
+box-shadow:none;
+}
+
+/* =========================
+UNDO DELETE BAR
+========================= */
+
+.undo-bar{
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:#1c1c1e;
+color:white;
+padding:12px 20px;
+border-radius:30px;
+display:none;
+gap:12px;
+align-items:center;
+box-shadow:0 10px 35px rgba(0,0,0,.6);
+}
+
+/* =========================
+SCROLLBAR (APPLE STYLE)
+========================= */
 
 ::-webkit-scrollbar{
 width:8px;
 }
 
+::-webkit-scrollbar-track{
+background:#0b0b0c;
+}
+
 ::-webkit-scrollbar-thumb{
-background:#333;
+background:#2c2c2e;
 border-radius:10px;
 }
 
-::-webkit-scrollbar-track{
-background:#0b0b0b;
+::-webkit-scrollbar-thumb:hover{
+background:#3a3a3c;
 }
 
-/* ------------------------
+/* =========================
+TEXT SELECTION FIX
+========================= */
+
+::selection{
+background:#0a84ff;
+color:white;
+}
+
+::-moz-selection{
+background:#0a84ff;
+color:white;
+}
+
+/* =========================
 MOBILE
------------------------- */
+========================= */
 
 @media(max-width:768px){
+
+.analytics-grid{
+grid-template-columns:1fr;
+}
 
 .rings{
 flex-direction:column;
 align-items:center;
 }
 
-.navbar-brand{
-font-size:16px;
+.page-header h1{
+font-size:32px;
 }
 
 }
