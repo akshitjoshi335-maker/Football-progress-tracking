@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TrackPro Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: 'Inter', sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+}
+
+body::before{
+content:"";
+position:absolute;
+width:600px;
+height:600px;
+background: radial-gradient(circle,rgba(255,255,255,0.12),transparent);
+top:-200px;
+right:-200px;
+filter: blur(120px);
+}
+
+.login-card{
+width:360px;
+padding:40px;
+border-radius:22px;
+background: rgba(255,255,255,0.08);
+backdrop-filter: blur(30px);
+-webkit-backdrop-filter: blur(30px);
+border:1px solid rgba(255,255,255,0.12);
+box-shadow:0 10px 40px rgba(0,0,0,0.45), inset 0 1px rgba(255,255,255,0.08);
+}
+
+.title{
+font-size:28px;
+font-weight:600;
+text-align:center;
+margin-bottom:18px;
+}
+
+.input-group{
+width:100%;
+margin-bottom:16px;
+}
+
+.input-group label{
+display:block;
+margin-bottom:8px;
+font-size:0.9rem;
+color:rgba(255,255,255,0.75);
+}
+
+.input-group input{
+width:100%;
+padding:14px 16px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.18);
+background: rgba(255,255,255,0.08);
+color:white;
+outline:none;
+font-size:1rem;
+}
+
+.input-group input:focus{
+border-color:#4da3ff;
+background: rgba(255,255,255,0.12);
+}
+
+.login-btn{
+margin-top:12px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+font-weight:600;
+font-size:1rem;
+background: linear-gradient(135deg,#4da3ff,#0066ff);
+color:white;
+cursor:pointer;
+transition:0.25s;
+}
+
+.login-btn:hover{
+transform: translateY(-1px);
+box-shadow:0 12px 24px rgba(0,0,0,0.3);
+}
+
+.message-box{
+margin-bottom:18px;
+padding:14px 16px;
+border-radius:14px;
+background: rgba(255,255,255,0.08);
+color:#ffdede;
+}
+
+.footer{
+margin-top:18px;
+text-align:center;
+font-size:13px;
+opacity:0.8;
+}
+
+.footer a{
+color:#a9d6ff;
+text-decoration:none;
+}
+
+.footer a:hover{
+text-decoration:underline;
+}
+</style>
+</head>
+<body>
+<div class="login-card animate-in" style="--delay:0.08s">
+<div class="title">TrackPro</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="message-box">
+      {% for category, message in messages %}
+        <div>{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<form method="POST" action="/login">
+  <div class="input-group">
+    <label for="username">Username</label>
+    <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter your username" required>
+  </div>
+  <div class="input-group">
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+  </div>
+  <button class="login-btn" type="submit">Login</button>
+</form>
+
+<div class="footer">
+New here? <a href="/register">Create a free account</a>
+</div>
+</div>
+<script src="/static/js/ui-smooth.js" defer></script>
+</body>
+</html>

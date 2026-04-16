@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard - TrackPro</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-gradient">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <span class="brand-badge me-2">⚽</span>
+      <span>TrackPro</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/analytics">Analytics</a></li>
+        <li class="nav-item"><a class="nav-link" href="/goals">Goals</a></li>
+        <li class="nav-item"><a class="nav-link" href="/badges">Badges</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/leaderboard">Leaderboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <header class="text-center mb-5">
+    <h1 class="display-4 fw-bold text-white">Leaderboard</h1>
+    <p class="lead text-light">See who is training hardest across the platform.</p>
+  </header>
+
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Top performers</h5>
+          <div class="table-responsive">
+            <table class="table table-borderless align-middle">
+              <thead>
+                <tr>
+                  <th scope="col">Rank</th>
+                  <th scope="col">Player</th>
+                  <th scope="col">Sessions</th>
+                  <th scope="col">Total Minutes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in leaderboard %}
+                <tr class="{% if row.id == current_user_id %}table-primary{% endif %}">
+                  <td>{{ loop.index }}</td>
+                  <td>{{ row.display_name }}</td>
+                  <td>{{ row.total_sessions }}</td>
+                  <td>{{ row.total_minutes }} min</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4" class="text-center text-muted">No leaderboard data yet.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Your rank</h5>
+          {% if current_rank %}
+          <p class="display-6 mb-2">#{{ current_rank }}</p>
+          <p class="text-muted">Keep logging sessions to climb higher.</p>
+          {% else %}
+          <p class="text-muted">You are not ranked yet. Add sessions to appear on the leaderboard.</p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="card shadow">
+        <div class="card-body">
+          <h5 class="card-title">Tips</h5>
+          <ul class="list-unstyled mb-0">
+            <li>• Log every training session.</li>
+            <li>• Track duration for each drill.</li>
+            <li>• Use goals to stay consistent.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

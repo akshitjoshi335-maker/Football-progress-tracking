@@ -1,0 +1,693 @@
+/* =========================
+GLOBAL
+========================= */
+
+*{
+box-sizing:border-box;
+}
+
+body{
+background:#0b0b0c;
+color:#e8e8e8;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+margin:0;
+padding:0;
+-webkit-font-smoothing:antialiased;
+}
+
+/* text always visible */
+
+h1,h2,h3,h4,h5{
+color:#ffffff;
+font-weight:600;
+}
+
+p,span,label,small{
+color:#cfcfcf;
+}
+
+/* smooth animations */
+
+*{
+transition:all .25s cubic-bezier(.4,0,.2,1);
+}
+
+/* =========================
+NAVBAR
+========================= */
+
+.navbar{
+background:#0e0e0f;
+border-bottom:1px solid rgba(255,255,255,0.06);
+padding:8px 18px;
+min-height:48px;
+}
+
+.navbar-brand{
+font-size:18px;
+font-weight:600;
+color:white !important;
+letter-spacing:.3px;
+}
+
+.navbar .nav-link{
+color:#bfbfbf !important;
+font-size:14px;
+margin-left:10px;
+}
+
+.navbar .nav-link:hover{
+color:white !important;
+}
+
+/* avatar */
+
+.navbar-avatar{
+width:30px;
+	display:grid;
+	place-items:center; /* ensure label is always centered inside the ring */
+height:30px;
+border-radius:50%;
+object-fit:cover;
+}
+
+/* =========================
+PAGE HEADER
+========================= */
+.page-header{
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:center;
+	width:100%;
+	text-align:center;
+	margin-top:45px;
+	margin-bottom:35px;
+	line-height:1.05;
+}
+
+.page-header h1{
+	font-size:44px;
+	letter-spacing:-1px;
+	color:var(--text);
+	margin:0 0 6px 0;
+}
+
+.page-header p{
+	color:var(--muted-weak);
+	margin:0;
+	font-size:15px;
+}
+
+/* =========================
+CARDS
+========================= */
+.card{
+	border-radius:var(--card-radius);
+	transition: box-shadow 360ms var(--long-ease), transform 360ms var(--long-ease);
+	background: linear-gradient(180deg, rgba(12,12,14,0.62), rgba(18,18,20,0.44));
+	border: 1px solid rgba(255,255,255,0.03);
+	padding:24px;
+	box-shadow: 0 18px 40px rgba(0,0,0,.6), inset 0 1px rgba(255,255,255,.02);
+	color: #ffffff;
+}
+
+.card:hover{
+	transform: translateY(-6px) translateZ(0);
+	box-shadow: 0 28px 70px rgba(0,0,0,.65), inset 0 1px rgba(255,255,255,.03);
+}
+
+/* =========================
+ANALYTICS GRID
+========================= */
+
+.analytics-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:28px;
+margin-top:30px;
+}
+
+.analytics-card{
+background:#141414;
+border-radius:18px;
+padding:30px;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 15px 35px rgba(0,0,0,.55);
+}
+
+/* =========================
+METRIC TEXT
+========================= */
+
+.metric-title{
+font-size:14px;
+color:#a0a0a0;
+margin-bottom:6px;
+}
+
+.metric-value{
+font-size:36px;
+font-weight:700;
+color:#ffffff;
+}
+
+/* =========================
+FITNESS RINGS
+========================= */
+
+.rings{
+	display:flex;
+	justify-content:center;
+	gap:50px;
+	margin-bottom:40px;
+	align-items:center;
+}
+
+.ring{
+	position:relative;
+	width:160px;
+	height:160px;
+	display:grid;
+	place-items:center; /* keep label centered */
+}
+
+.ring svg{
+	transform:rotate(-90deg);
+	width:100%;
+	height:100%;
+	display:block;
+	z-index:1;
+}
+
+.ring-bg{
+	stroke:#2b2b2b; /* dark, matte background ring */
+	stroke-width:14;
+	fill:none;
+}
+
+.ring-progress{
+	stroke-width:14;
+	stroke-linecap:round;
+	fill:none;
+	stroke-dasharray:440;
+	stroke-dashoffset:440;
+	transition:stroke-dashoffset 1.1s cubic-bezier(.16,.84,.29,1);
+	z-index:1;
+	stroke: #efefef; /* smooth, matte white */
+	stroke-opacity: 0.96;
+	mix-blend-mode: normal;
+}
+
+/* apple colors */
+.ring-green{ stroke:#30d158; }
+.ring-blue{ stroke:#0a84ff; }
+.ring-orange{ stroke:#ff9f0a; }
+
+.ring-label{
+	position:absolute;
+	z-index:2; /* sit above the SVG strokes */
+	top:50%;
+	left:50%;
+	transform:translate(-50%,-50%);
+	text-align:center;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content:center;
+	pointer-events:none;
+}
+
+.ring-label h3{
+	font-size:34px;
+	margin:0;
+	color:#ffffff;
+	line-height:1;
+	text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+}
+
+.ring-label p{
+	font-size:13px;
+	color: rgba(255,255,255,0.78);
+	margin:0;
+	line-height:1.1;
+	text-shadow: 0 1px 0 rgba(0,0,0,0.55);
+}
+
+/* =========================
+TABLE
+========================= */
+
+.table{
+color:#dcdcdc;
+margin-top:20px;
+}
+
+.table thead{
+border-bottom:1px solid rgba(255,255,255,0.08);
+color:#ffffff;
+}
+
+.table tbody tr{
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.table tbody tr:hover{
+background:rgba(255,255,255,0.03);
+}
+
+/* Strong override: make all app boxes dark smoky glass with white text
+	 This ensures earlier accidental light gradients are overridden. */
+.card, .analytics-card, .login-card, .undo-bar, .table tbody tr, .box, .modal{
+	background: linear-gradient(180deg, rgba(12,12,14,0.66), rgba(18,18,20,0.48)) !important;
+	border: 1px solid rgba(255,255,255,0.03) !important;
+	color: #ffffff !important;
+	backdrop-filter: blur(6px) saturate(120%) !important;
+	-webkit-backdrop-filter: blur(6px) saturate(120%) !important;
+}
+
+.table tbody tr:hover{
+	background: linear-gradient(180deg, rgba(10,10,12,0.48), rgba(16,16,18,0.36)) !important;
+}
+
+.card .card-title, .analytics-card .metric-title, .login-card .title{
+	color: #ffffff !important;
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.btn{
+border-radius:12px;
+font-size:14px;
+padding:6px 16px;
+}
+
+.btn-primary{
+background:#0a84ff;
+border:none;
+}
+
+.btn-primary:hover{
+background:#0071e3;
+}
+
+.btn-danger{
+background:#ff453a;
+border:none;
+}
+
+.btn-danger:hover{
+background:#d9362e;
+}
+
+/* =========================
+FORMS
+========================= */
+
+.form-control,
+.form-select{
+border-radius:12px;
+border:1px solid #333;
+background:#1c1c1e;
+color:#ffffff;
+}
+
+.form-control:focus{
+border-color:#0a84ff;
+box-shadow:none;
+}
+
+/* =========================
+UNDO DELETE BAR
+========================= */
+
+.undo-bar{
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:#1c1c1e;
+color:white;
+padding:12px 20px;
+border-radius:30px;
+display:none;
+gap:12px;
+align-items:center;
+box-shadow:0 10px 35px rgba(0,0,0,.6);
+}
+
+/* =========================
+SCROLLBAR (APPLE STYLE)
+========================= */
+
+::-webkit-scrollbar{
+width:8px;
+}
+
+::-webkit-scrollbar-track{
+background:#0b0b0c;
+}
+
+::-webkit-scrollbar-thumb{
+background:#2c2c2e;
+border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+background:#3a3a3c;
+}
+
+/* =========================
+TEXT SELECTION FIX
+========================= */
+
+::selection{
+background:#0a84ff;
+color:white;
+}
+
+::-moz-selection{
+background:#0a84ff;
+color:white;
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:768px){
+
+.analytics-grid{
+grid-template-columns:1fr;
+}
+
+/* =========================
+Apple-like design tokens + motion
+========================= */
+:root{
+	--bg:#0b0b0c;
+	--surface:#141416;
+	--muted:#9a9a9a;
+	--text:#ffffff; /* stronger default text for better contrast */
+	--primary:#0a84ff;
+	--glass: rgba(255,255,255,0.04);
+	--card-radius:18px;
+	--soft-radius:28px;
+	--short-ease: cubic-bezier(.22,.9,.35,1);
+	--long-ease: cubic-bezier(.2,.9,.2,1);
+}
+
+/* stronger muted tokens for contrast tuning */
+:root{
+	--muted-strong: #e1e1e6; /* near text color but slightly dimmer */
+	--muted-weak: rgba(255,255,255,0.68);
+	--shadow-strong: rgba(0,0,0,0.6);
+	--btn-hover-shadow: 0 10px 30px rgba(10,132,255,0.12);
+}
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce){
+	*{transition:none !important; animation:none !important}
+}
+
+/* Glass surface commonly used in Apple UI */
+.glass{
+	background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+	border-radius: var(--card-radius);
+	border:1px solid var(--glass);
+	backdrop-filter: blur(8px) saturate(120%);
+}
+
+/* Gentle floating entrance */
+.animate-in{
+	opacity:0;
+	transform: translateY(8px) scale(0.998);
+	animation:appear 520ms var(--short-ease) forwards;
+	will-change:transform,opacity;
+}
+.animate-in[style*="--delay"]{animation-delay:var(--delay);} /* honor inline delay */
+
+@keyframes appear{
+	0%{opacity:0; transform:translateY(10px) scale(.997)}
+	60%{opacity:1; transform:translateY(-2px) scale(1.002)}
+	100%{opacity:1; transform:translateY(0) scale(1)}
+}
+
+/* Subtle interactive motion for controls */
+.btn, .form-control, .card{
+	transition: box-shadow 240ms var(--short-ease), transform 240ms var(--short-ease), background-color 200ms var(--short-ease);
+}
+
+/* Hover-enabled refinements (desktop) */
+.has-hover .btn:hover{ transform: translateY(-3px) scale(1.01); box-shadow: var(--btn-hover-shadow); }
+.has-hover .card:hover{ transform: translateY(-6px); box-shadow: 0 26px 60px var(--shadow-strong); }
+
+/* Pressed feedback (touch and pointer) */
+.btn.pressed, .btn:active{ transform: translateY(1px) scale(.99) !important; box-shadow:none !important; }
+
+/* Focus-visible outlines for keyboard users */
+.btn:focus-visible, .form-control:focus-visible, .form-select:focus-visible, a:focus-visible{
+	outline: 3px solid rgba(10,132,255,0.12);
+	outline-offset: 3px;
+}
+
+/* Smooth focus rings */
+.form-control:focus, .form-select:focus{
+	box-shadow: 0 6px 20px rgba(10,132,255,0.12);
+	border-color:var(--primary);
+	outline: none;
+}
+
+/* Floating card elevation */
+.card{
+	border-radius:var(--card-radius);
+	transition: box-shadow 360ms var(--long-ease), transform 360ms var(--long-ease);
+}
+.card:active{transform:translateY(1px) scale(.999)}
+
+/* Ring progress animation smoother (spring-like) */
+.ring-progress{transition: stroke-dashoffset 1.4s var(--long-ease), stroke 360ms var(--short-ease)}
+
+/* small helpers */
+.rounded-soft{border-radius:var(--soft-radius);}
+
+/* High-contrast small-screen adjustments */
+@media (max-width:480px){
+	:root{--card-radius:14px}
+}
+
+/* =========================
+Contrast fixes
+Ensure muted and helper text stays readable on dark backgrounds
+========================= */
+:root{
+	--muted-strong: #d1d5db; /* slightly stronger muted token */
+	--muted-weak: rgba(255,255,255,0.62);
+}
+
+/* Make smaller/helper text clearly visible */
+p, span, label, small, .form-text, .lead, .navbar .nav-link, .table, .table td, .table th{
+	color: var(--muted-strong) !important;
+}
+
+/* keep `.text-muted` slightly lighter but still readable */
+.text-muted{ color: var(--muted-weak) !important }
+
+/* Slightly dim secondary captions but still high contrast */
+.metric-title, .ring-label p, .page-header p, .badge-desc{
+	color: var(--muted-weak) !important;
+}
+
+/* stronger table text for legibility */
+.table td, .table th{ color: var(--muted-strong) !important }
+
+/* form labels clearer */
+.form-label, label{ color: var(--muted-strong) !important }
+
+/* subtle link underline animation */
+.nav-link{ position:relative }
+.nav-link::after{ content:''; position:absolute; left:0; right:0; bottom:-6px; height:2px; background:var(--primary); transform:scaleX(0); transform-origin:left; transition:transform 220ms var(--short-ease); opacity:0.0 }
+.has-hover .nav-link:hover::after{ transform:scaleX(1); opacity:1 }
+
+/* table row hover subtle lift */
+.table tbody tr{ transition: background-color 260ms var(--short-ease), transform 260ms var(--short-ease); }
+.table tbody tr:hover{ transform: translateY(-3px); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+
+/* smoother buttons */
+.btn{ border-radius:14px; transition: transform 220ms var(--short-ease), box-shadow 260ms var(--short-ease); }
+.btn-primary{ background: linear-gradient(180deg,var(--primary), #0066ff); box-shadow: 0 6px 18px rgba(10,132,255,0.12); }
+.btn-primary:hover{ transform: translateY(-2px) scale(1.01); box-shadow: 0 14px 34px rgba(10,132,255,0.14); }
+
+/* badge icon pop improved */
+.badge-icon{ transition: transform 420ms cubic-bezier(.2,.9,.2,1); }
+.animate-in .badge-icon{ transform: scale(.96); }
+.animate-in[style]*:not([style*="--delay"]) .badge-icon{ transform: scale(1); }
+
+/* Placeholder opacity */
+::placeholder{ color: rgba(255,255,255,0.65); opacity:1 }
+:-ms-input-placeholder{ color: rgba(255,255,255,0.65) }
+::-ms-input-placeholder{ color: rgba(255,255,255,0.65) }
+
+/* Improve form/input contrast across the app (session form, filters, small inputs) */
+.form-control, .form-select, input[type="text"], input[type="date"], input[type="number"], textarea, select{
+	color: #ffffff !important;
+	background: rgba(255,255,255,0.02) !important;
+	border: 1px solid rgba(255,255,255,0.06) !important;
+}
+.form-control::placeholder, .form-select::placeholder, input::placeholder, textarea::placeholder{
+	color: rgba(255,255,255,0.86) !important;
+	opacity:1 !important;
+}
+
+/* Session form specific: ensure labels and helper text inside the dark box are visible */
+.metric-card .text-muted, .chart-card .text-muted, .login-card .text-muted, .card .text-muted{
+	color: rgba(255,255,255,0.78) !important;
+}
+
+/* Make table body empty-state more visible */
+.table tbody td{ color: rgba(255,255,255,0.92) !important; }
+
+/* Ensure metric/drill/chart cards use dark smoky background and highly readable text */
+.metric-card, .drill-card, .chart-card, .top-drills, .metric-card *{
+	background: linear-gradient(180deg, rgba(12,12,14,0.62), rgba(18,18,20,0.44)) !important;
+	color: #ffffff !important;
+	border:1px solid rgba(255,255,255,0.03) !important;
+}
+
+.metric-card h6, .metric-card .text-muted, .metric-card p, .metric-card .small, .drill-card p, .chart-card p{
+	color: rgba(255,255,255,0.86) !important;
+}
+
+.metric-card h2, .metric-card h1, .metric-card h3, .metric-card h4{
+	color: #ffffff !important;
+}
+
+/* Strong per-element overrides to ensure labels and captions are fully visible */
+.metric-card > h6, .metric-card > h2, .metric-card > p, .metric-card > .text-muted, .metric-card > .small{
+	color: #ffffff !important;
+	opacity: 1 !important;
+	filter: none !important;
+	text-shadow: none !important;
+}
+
+/* Ensure nested muted text doesn't get dimmed by parent styles */
+.metric-card .text-muted{ color: rgba(255,255,255,0.88) !important; opacity:1 !important }
+
+/* Remove any accidental overlay on metric-card children */
+.metric-card *{ background: transparent !important; }
+
+/* Make empty-state and captions clearly visible */
+.metric-card .text-muted, .chart-card .text-muted, .drill-card .text-muted{ color: rgba(255,255,255,0.78) !important }
+
+/* Small tweak: increase contrast for table header inside dark cards */
+.metric-card .table thead th, .chart-card .table thead th{ color: #f7f7f7 !important }
+
+/* Strong global adjustments for specific labels/placeholders listed by the user */
+/* Date label and placeholder */
+label[for="date"], #date, input#date{
+	color: #efefef !important;
+}
+
+/* Drill/Focus label and placeholder */
+label[for="drill"], input#drill, input#drill::placeholder{
+	color: #efefef !important;
+}
+
+/* Duration and Notes labels/placeholders */
+label[for="duration"], input#duration, label[for="notes"], input#notes, input#notes::placeholder{
+	color: #efefef !important;
+}
+
+/* Ensure small helper text like 'mm/dd/yyyy', 'e.g. Dribbling', 'Goals, feedback...' are matte white */
+input.form-control.form-control-lg.form-control-custom::placeholder{ color: rgba(239,239,239,0.92) !important; }
+
+/* Make 'No analytics data yet.' and similar muted messages visible */
+.text-muted{ color: rgba(239,239,239,0.88) !important; }
+
+/* Force session table empty state readable */
+.table tbody td, .table tbody td div{ color: #ffffff !important; }
+
+/* Matte white inputs and labels: remove glossy/metallic feel and ensure strong legibility */
+.form-control, .form-select, input[type="text"], input[type="date"], input[type="number"], textarea, select{
+	color: #efefef !important; /* matte white */
+	background-color: rgba(12,12,14,0.62) !important; /* flat smoky bg */
+	background-image: none !important;
+	border: 1px solid rgba(255,255,255,0.04) !important;
+	text-shadow: none !important;
+}
+
+.form-control::placeholder, .form-select::placeholder, input::placeholder, textarea::placeholder{
+	color: rgba(239,239,239,0.88) !important; /* matte white-ish placeholder */
+	opacity:1 !important;
+	text-shadow: none !important;
+}
+
+label, .form-label, .input-label{
+	color: rgba(239,239,239,0.92) !important;
+	text-shadow: none !important;
+}
+
+select option, .form-select option{
+	color: #efefef !important;
+	background-color: rgba(12,12,14,0.9) !important;
+}
+
+/* Remove any residual shiny gradients from small controls */
+.metric-card .form-control, .chart-card .form-control, .drill-card .form-control{
+	background-image: none !important;
+}
+
+/* Ensure outline/labels on dark surfaces */
+.form-control, .form-select{ color: var(--text); }
+
+/* Make outlined light buttons truly readable */
+.btn-outline-light{ color: #f5f5f7; border-color: rgba(255,255,255,0.12); }
+
+/* Improve contrast for small nav text */
+.navbar .nav-link{ color: var(--muted-strong) !important }
+
+/* Specific fixes discovered by visual scan: login and form elements */
+.login-card, .login-card *{
+	color: #ffffff !important; /* explicitly ensure login card text is readable */
+}
+.login-card{
+	background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)) !important;
+	border:1px solid rgba(255,255,255,0.06) !important;
+}
+.login-card .title{ color: var(--text) !important; }
+.login-card .footer{ color: var(--muted-weak) !important; }
+
+/* Force high contrast on reported selectors from the scanner */
+div.login-card.animate-in, div.login-card.animate-in * { color: #ffffff !important; }
+div.title { color: #ffffff !important; }
+form { color: #ffffff !important; }
+select.select-box, select, option { color: #ffffff !important; background: #1c1c1e !important; }
+button.login-btn { color: #ffffff !important; background: linear-gradient(135deg,var(--primary), #0066ff) !important; border: none !important; }
+div.footer { color: var(--muted-weak) !important; }
+
+/* Form controls and selects */
+select, select.select-box, .form-select, option{
+	color: var(--text) !important;
+	background: #1c1c1e !important;
+}
+
+/* Primary login button stronger */
+button.login-btn, .login-btn{
+	color: #ffffff !important;
+	background: linear-gradient(135deg,var(--primary), #0066ff) !important;
+	border: none !important;
+}
+
+
+
+.rings{
+flex-direction:column;
+align-items:center;
+}
+
+.page-header h1{
+font-size:32px;
+}
+
+}
