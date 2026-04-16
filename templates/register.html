@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrackPro Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-gradient">
+<div class="card animate-in" style="--delay:0.08s">
+  <div class="title">Create your account</div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="message-box">
+        {% for category, message in messages %}
+          <div>{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="/register">
+    <div class="input-group">
+      <label for="username">Username</label>
+      <input id="username" name="username" type="text" autocomplete="username" placeholder="Choose a username" required>
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="new-password" placeholder="Enter a password" required>
+    </div>
+    <div class="input-group">
+      <label for="confirm_password">Confirm Password</label>
+      <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" placeholder="Repeat your password" required>
+    </div>
+    <button class="action-btn" type="submit">Sign up</button>
+  </form>
+
+  <div class="footer">
+    Already have an account? <a href="/login">Login</a>
+  </div>
+</div>
+<script src="/static/js/ui-smooth.js" defer></script>
+</body>
+</html>
