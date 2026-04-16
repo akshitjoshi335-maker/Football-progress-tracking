@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in | TrackPro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style-new.css">
+</head>
+<body class="bg-gradient">
+<div class="auth-shell">
+  <div class="auth-card animate-in" style="--delay:0.08s">
+    <div class="auth-panel">
+      <div class="auth-brand">
+        <span class="brand-badge">⚽</span>
+        <div>
+          <p class="eyebrow">TrackPro</p>
+          <h1>Sign in to your training hub</h1>
+          <p class="auth-copy">Access your football sessions, messages, badges, and analytics in a beautifully polished modern experience.</p>
+        </div>
+      </div>
+      <div class="auth-feature-grid">
+        <div class="feature-item">Fast session logging</div>
+        <div class="feature-item">Coach-ready messaging</div>
+        <div class="feature-item">Beautiful progress insights</div>
+      </div>
+    </div>
+
+    <div class="auth-form">
+      <div class="auth-form-header">
+        <h2>Welcome back.</h2>
+        <p>Sign in to continue your football development journey.</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="message-box">
+            {% for category, message in messages %}
+              <div>{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" action="/login">
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter your username" required>
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+        </div>
+        <button class="btn btn-primary auth-btn" type="submit">Sign in</button>
+      </form>
+
+      <div class="auth-footer">
+        New to TrackPro? <a href="/register">Create an account</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/static/js/ui-smooth.js" defer></script>
+</body>
+</html>

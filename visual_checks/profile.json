@@ -1,0 +1,58 @@
+[
+  {
+    "selector": "div.login-card.animate-in",
+    "text": "TrackPro\nAkshit\nMisha\n Continue\nFootball Training Tracker",
+    "fontSize": 16,
+    "ratio": 1,
+    "recommendedColor": "#e8e8e8"
+  },
+  {
+    "selector": "div.title",
+    "text": "TrackPro",
+    "fontSize": 28,
+    "ratio": 1,
+    "recommendedColor": "#e8e8e8"
+  },
+  {
+    "selector": "form",
+    "text": "Akshit\nMisha\n Continue",
+    "fontSize": 16,
+    "ratio": 1,
+    "recommendedColor": "#e8e8e8"
+  },
+  {
+    "selector": "select.select-box",
+    "text": "Akshit\nMisha",
+    "fontSize": 13.3333,
+    "ratio": 1,
+    "recommendedColor": "#e8e8e8"
+  },
+  {
+    "selector": "option",
+    "text": "Akshit",
+    "fontSize": 13.3333,
+    "ratio": 1,
+    "recommendedColor": "#e8e8e8"
+  },
+  {
+    "selector": "option",
+    "text": "Misha",
+    "fontSize": 13.3333,
+    "ratio": 1,
+    "recommendedColor": "#e8e8e8"
+  },
+  {
+    "selector": "button.login-btn",
+    "text": "Continue",
+    "fontSize": 15,
+    "ratio": 1,
+    "recommendedColor": "#e8e8e8"
+  },
+  {
+    "selector": "div.footer",
+    "text": "Football Training Tracker",
+    "fontSize": 13,
+    "ratio": 1,
+    "recommendedColor": "#e8e8e8"
+  }
+]
