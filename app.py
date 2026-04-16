@@ -19,6 +19,16 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 MAX_AVATAR_SIZE = 2 * 1024 * 1024  # 2 MB
 app.config['MAX_CONTENT_LENGTH'] = MAX_AVATAR_SIZE
 
+
+def normalize_username(raw_username):
+    """Normalize username input so case does not matter and format is Title-like."""
+    if not raw_username:
+        return ''
+    cleaned = ' '.join(raw_username.strip().split())
+    cleaned = cleaned.lower()
+    return cleaned.capitalize()
+
+
 # initialize database if not exists
 
 def init_db():
@@ -127,18 +137,21 @@ def init_db():
     )
 
     def ensure_user(username, password, display_name, role, bio):
-        existing = c.execute('SELECT id, role FROM users WHERE username = ?', (username,)).fetchone()
+        normalized = normalize_username(username)
+        existing = c.execute('SELECT id, role, username FROM users WHERE LOWER(username) = ?', (normalized.lower(),)).fetchone()
         password_hash = generate_password_hash(password)
         if existing:
             if existing[1] != role:
                 c.execute('UPDATE users SET role = ? WHERE id = ?', (role, existing[0]))
+            if existing[2] != normalized:
+                c.execute('UPDATE users SET username = ? WHERE id = ?', (normalized, existing[0]))
         else:
             c.execute(
                 'INSERT INTO users (username, password_hash, display_name, bio, role, created_at) VALUES (?, ?, ?, ?, ?, ?)',
-                (username, password_hash, display_name, bio, role, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                (normalized, password_hash, display_name, bio, role, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
             )
 
-    ensure_user('admin', 'Admin123!', 'TrackPro Admin', 'admin', 'Platform administrator')
+    ensure_user('admin', 'hecknoo', 'TrackPro Admin', 'admin', 'Platform administrator')
     ensure_user('coach', 'Coach123!', 'Coach Morgan', 'coach', 'Your expert coach. Message anytime.')
     
     conn.commit()
@@ -290,6 +303,7 @@ def index():
                COALESCE(SUM(s.duration), 0) AS total_minutes
         FROM users u
         LEFT JOIN sessions s ON u.id = s.user_id
+        WHERE COALESCE(u.role, 'user') NOT IN ('admin', 'coach')
         GROUP BY u.id
         ORDER BY total_minutes DESC, total_sessions DESC
         LIMIT 5
@@ -345,6 +359,7 @@ def leaderboard():
                COALESCE(SUM(s.duration), 0) AS total_minutes
         FROM users u
         LEFT JOIN sessions s ON u.id = s.user_id
+        WHERE COALESCE(u.role, 'user') NOT IN ('admin', 'coach')
         GROUP BY u.id
         ORDER BY total_minutes DESC, total_sessions DESC
         """
@@ -359,6 +374,105 @@ def leaderboard():
                          leaderboard=leaderboard,
                          current_rank=current_rank,
                          current_user_id=user_id)
+
+
+@app.route('/chat')
+def chat():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    conn = get_db_connection()
+    users = conn.execute(
+        """
+        SELECT id,
+               COALESCE(NULLIF(display_name, ''), username) AS display_name,
+               role
+        FROM users
+        WHERE id != ?
+        ORDER BY display_name ASC
+        """,
+        (user_id,)
+    ).fetchall()
+
+    messages = conn.execute(
+        """
+        SELECT u.id,
+               COALESCE(NULLIF(u.display_name, ''), u.username) AS display_name,
+               (SELECT body FROM messages m2
+                WHERE ((m2.sender_id = ? AND m2.recipient_id = u.id)
+                       OR (m2.sender_id = u.id AND m2.recipient_id = ?))
+                ORDER BY datetime(m2.created_at) DESC
+                LIMIT 1) AS preview,
+               (SELECT created_at FROM messages m2
+                WHERE ((m2.sender_id = ? AND m2.recipient_id = u.id)
+                       OR (m2.sender_id = u.id AND m2.recipient_id = ?))
+                ORDER BY datetime(m2.created_at) DESC
+                LIMIT 1) AS last_at,
+               (SELECT COUNT(*) FROM messages m2
+                WHERE m2.sender_id = u.id AND m2.recipient_id = ? AND m2.read = 0) AS unread
+        FROM users u
+        WHERE u.id != ?
+        ORDER BY last_at DESC
+        """,
+        (user_id, user_id, user_id, user_id, user_id, user_id)
+    ).fetchall()
+
+    conn.close()
+    return render_template('chat.html', username=session.get('username'), users=messages)
+
+
+@app.route('/chat/<int:recipient_id>', methods=['GET', 'POST'])
+def chat_with(recipient_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    conn = get_db_connection()
+    recipient = conn.execute('SELECT id, username, display_name, role FROM users WHERE id = ?', (recipient_id,)).fetchone()
+    if not recipient:
+        conn.close()
+        return redirect(url_for('chat'))
+
+    if request.method == 'POST':
+        body = request.form.get('body', '').strip()
+        if body:
+            conn.execute(
+                'INSERT INTO messages (sender_id, recipient_id, body, created_at) VALUES (?, ?, ?, ?)',
+                (user_id, recipient_id, body, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            )
+            conn.commit()
+        return redirect(url_for('chat_with', recipient_id=recipient_id))
+
+    conn.execute(
+        'UPDATE messages SET read = 1 WHERE sender_id = ? AND recipient_id = ? AND read = 0',
+        (recipient_id, user_id)
+    )
+    conn.commit()
+
+    conversation = conn.execute(
+        """
+        SELECT m.*, u.username AS sender_username, COALESCE(NULLIF(u.display_name, ''), u.username) AS sender_name
+        FROM messages m
+        JOIN users u ON u.id = m.sender_id
+        WHERE (m.sender_id = ? AND m.recipient_id = ?) OR (m.sender_id = ? AND m.recipient_id = ?)
+        ORDER BY datetime(m.created_at) ASC
+        """,
+        (user_id, recipient_id, recipient_id, user_id)
+    ).fetchall()
+
+    users = conn.execute(
+        """
+        SELECT id,
+               COALESCE(NULLIF(display_name, ''), username) AS display_name,
+               role
+        FROM users
+        WHERE id != ?
+        ORDER BY display_name ASC
+        """,
+        (user_id,)
+    ).fetchall()
+
+    conn.close()
+    return render_template('chat.html', username=session.get('username'), users=users, conversation=conversation, selected_user=recipient, current_user_id=user_id)
 
 
 @app.route('/goals', methods=['GET', 'POST'])
@@ -526,15 +640,16 @@ def badges():
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username', '').strip()
+        username_input = request.form.get('username', '').strip()
         password = request.form.get('password', '')
+        username = normalize_username(username_input)
 
         if not username or not password:
             flash('Please provide username and password.', 'danger')
             return render_template('login.html')
 
         conn = get_db_connection()
-        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        user = conn.execute('SELECT * FROM users WHERE LOWER(username) = ?', (username.lower(),)).fetchone()
         conn.close()
 
         if user:
@@ -556,11 +671,12 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form.get('username', '').strip()
+        username_input = request.form.get('username', '').strip()
         password = request.form.get('password', '')
         confirm_password = request.form.get('confirm_password', '')
+        username = normalize_username(username_input)
 
-        if not username or not password or not confirm_password:
+        if not username_input or not password or not confirm_password:
             flash('Please complete all fields.', 'danger')
             return render_template('register.html')
 
@@ -573,7 +689,7 @@ def register():
             return render_template('register.html')
 
         conn = get_db_connection()
-        existing = conn.execute('SELECT id FROM users WHERE username = ?', (username,)).fetchone()
+        existing = conn.execute('SELECT id FROM users WHERE LOWER(username) = ?', (username.lower(),)).fetchone()
         if existing:
             conn.close()
             flash('Username is already taken.', 'danger')
@@ -584,7 +700,7 @@ def register():
             (username, generate_password_hash(password), datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         )
         conn.commit()
-        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        user = conn.execute('SELECT * FROM users WHERE LOWER(username) = ?', (username.lower(),)).fetchone()
         conn.close()
 
         session['user_id'] = user['id']

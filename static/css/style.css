@@ -200,11 +200,83 @@ button, a, input, textarea, select {
 .chart-card,
 .session-card,
 .leaderboard-card,
-.form-card {
+.form-card,
+.chat-sidebar,
+.chat-panel {
   background: rgba(13, 18, 31, 0.92);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 24px;
   padding: 28px;
+}
+
+.chat-sidebar {
+  padding: 24px 20px;
+}
+
+.chat-user-list .list-group-item {
+  border-radius: 18px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.02);
+  transition: background 180ms var(--ease);
+}
+
+.chat-user-list .list-group-item.active,
+.chat-user-list .list-group-item:hover {
+  background: rgba(69,146,255,0.14);
+}
+
+.chat-panel {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 610px;
+}
+
+.chat-messages {
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.chat-message {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.chat-message.sent {
+  justify-content: flex-end;
+}
+
+.chat-message.received {
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 78%;
+  border-radius: 22px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  box-shadow: inset 0 2px 14px rgba(0, 0, 0, 0.12);
+}
+
+.chat-message.sent .message-bubble {
+  background: linear-gradient(135deg, rgba(69,146,255,0.24), rgba(41,88,212,0.28));
+}
+
+.chat-message.received .message-bubble {
+  background: rgba(255,255,255,0.04);
+}
+
+.chat-panel form .input-group {
+  margin-bottom: 0;
+}
+
+.chat-panel .form-control {
+  border-radius: 999px 0 0 999px;
+}
+
+.chat-panel .btn-primary {
+  border-radius: 0 999px 999px 0;
 }
 
 .metric-card {
@@ -342,12 +414,15 @@ label,
   gap: 1px;
   overflow: hidden;
   border-radius: 36px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+  background: rgba(10, 15, 28, 0.98);
+  box-shadow: var(--soft-shadow);
+  position: relative;
+  z-index: 2;
 }
 
 .auth-panel,
 .auth-form {
-  background: linear-gradient(180deg, rgba(10, 15, 28, 0.96), rgba(10, 15, 28, 0.91));
+  background: rgba(10, 15, 28, 0.98);
   padding: 44px;
 }
 
