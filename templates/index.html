@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrackPro Dashboard</title>
+  
+  <!-- Tailwind CSS CDN – the foundation of modern, expert-grade UIs -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+    
+    :root {
+      --tw-color-primary: #3b82f6;
+      --tw-color-accent: #10b981;
+    }
+    
+    * {
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, box-shadow, transform;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 200ms;
+    }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    
+    /* Apple-level glassmorphism + deep sports energy */
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    }
+    
+    /* Nike/Adidas inspired premium topbar */
+    .topbar {
+      animation: fadeInDown 600ms cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+    
+    /* Smooth card lift + glow (feels expensive) */
+    .card-hover {
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 30px 60px -15px rgb(59 130 246 / 0.35);
+    }
+    
+    /* Premium button with press feedback */
+    .btn-premium {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-premium::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 40%;
+      height: 300%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transform: skewX(-25deg);
+      animation: shimmer 4s linear infinite;
+    }
+    
+    @keyframes shimmer {
+      100% { transform: translateX(300%); }
+    }
+    
+    /* Apple-smooth entry animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(32px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-in {
+      animation: fadeInUp 700ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+    }
+    
+    /* Metric number pop (feels alive) */
+    .metric-value {
+      font-variant-numeric: tabular-nums;
+    }
+    
+    /* Subtle background energy gradient (sports vibe) */
+    .hero-bg {
+      background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(16, 185, 129, 0.18) 0%, transparent 50%);
+    }
+  </style>
+</head>
+<body class="hero-bg bg-[#0b1218] text-[#eef2f7] min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    
+    <!-- PREMIUM TOPBAR – Apple navbar feel -->
+    <header class="topbar glass rounded-3xl px-8 py-5 flex flex-col lg:flex-row items-start lg:items-center justify-between sticky top-6 z-50 gap-4">
+      <div class="flex items-center gap-x-4">
+        <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#10b981] text-white text-3xl rounded-2xl shadow-inner">⚽</div>
+        <h1 class="text-3xl font-semibold tracking-[-0.04em]">TrackPro</h1>
+      </div>
+      
+      <nav class="flex flex-wrap items-center gap-2 text-sm font-medium">
+        <a href="/" class="nav-item px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">
+          <span class="text-lg">📊</span>
+          Dashboard
+        </a>
+        <a href="/analytics" class="nav-item px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">
+          <span class="text-lg">📈</span>
+          Analytics
+        </a>
+        <a href="/goals" class="nav-item px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">
+          <span class="text-lg">🎯</span>
+          Goals
+        </a>
+        <a href="/badges" class="nav-item px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">
+          <span class="text-lg">🏆</span>
+          Badges
+        </a>
+        <a href="/chat" class="nav-item px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">
+          <span class="text-lg">💬</span>
+          Chat
+        </a>
+        <a href="/social" class="nav-item px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">
+          <span class="text-lg">🌐</span>
+          Social
+        </a>
+        <a href="/leaderboard" class="nav-item px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">
+          <span class="text-lg">🔥</span>
+          Leaderboard
+        </a>
+        <a href="/logout" class="nav-item px-6 py-3 rounded-3xl text-red-400 hover:bg-red-400/10 flex items-center gap-x-2">
+          Logout
+        </a>
+      </nav>
+      
+      <!-- Profile quick access -->
+      <a href="/profile" class="flex-shrink-0 flex items-center gap-x-3 group">
+        <div class="w-9 h-9 bg-white/10 rounded-2xl overflow-hidden flex items-center justify-center text-2xl ring-2 ring-white/30 group-hover:ring-[#3b82f6]">
+          {% if avatar_url %}
+            <img src="{{ avatar_url }}" alt="{{ user.display_name or user.username }}" class="w-full h-full object-cover" />
+          {% else %}
+            ⚽
+          {% endif %}
+        </div>
+        <div class="text-right">
+          <p class="text-sm font-semibold">{{ user.display_name or user.username }}</p>
+          <p class="text-xs text-white/60">Pro Player</p>
+        </div>
+      </a>
+    </header>
+
+    <main class="mt-12">
+      <!-- HERO BANNER – Nike-style energy -->
+      <div class="glass rounded-3xl p-10 mb-12 flex items-center justify-between overflow-hidden relative">
+        <div class="max-w-md">
+          <div class="inline-flex items-center gap-x-2 bg-white/10 text-white text-sm font-medium px-5 h-9 rounded-3xl mb-6">
+            🔥 TODAY'S FOCUS
+          </div>
+          <h2 class="text-5xl font-semibold tracking-[-0.04em] leading-none mb-4">Keep the fire alive.<br>Train like a legend.</h2>
+          <p class="text-white/70 text-lg">Your last session was elite. Let's make today even better.</p>
+          <button onclick="document.getElementById('session-form').scrollIntoView({behavior:'smooth'})" 
+                  class="btn-premium mt-8 px-10 py-5 bg-gradient-to-r from-[#3b82f6] to-[#10b981] text-white font-semibold text-lg rounded-3xl flex items-center gap-x-3 shadow-xl">
+            LOG SESSION
+            <span class="text-2xl">→</span>
+          </button>
+        </div>
+        
+        <!-- Decorative ball -->
+        <div class="hidden lg:flex text-[180px] opacity-10 absolute -bottom-12 -right-8 rotate-12">⚽</div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- QUICK OVERVIEW (left) -->
+        <section class="lg:col-span-7 glass rounded-3xl p-8">
+          <div class="flex justify-between items-baseline mb-8">
+            <h2 class="text-2xl font-semibold">Quick overview</h2>
+            <a href="/analytics" class="text-[#3b82f6] text-sm font-medium flex items-center gap-x-1 hover:gap-x-3">
+              Full analytics <span>→</span>
+            </a>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-6 mb-10">
+            <!-- Metric 1 -->
+            <div class="card-hover glass rounded-3xl p-6">
+              <p class="uppercase text-xs tracking-[0.5px] text-white/60 mb-1">Total sessions</p>
+              <p id="total-sessions" class="metric-value text-6xl font-semibold text-white">{{ stats.total_sessions }}</p>
+              <p class="text-white/60 text-sm mt-3">Sessions logged this season</p>
+            </div>
+            <!-- Metric 2 -->
+            <div class="card-hover glass rounded-3xl p-6">
+              <p class="uppercase text-xs tracking-[0.5px] text-white/60 mb-1">Total minutes</p>
+              <p id="total-minutes" class="metric-value text-6xl font-semibold text-white">{{ stats.total_minutes }}</p>
+              <p class="text-white/60 text-sm mt-3">Minutes trained • On fire 🔥</p>
+            </div>
+          </div>
+          
+          <!-- Recent sessions -->
+          <div>
+            <h3 class="font-medium mb-4 flex items-center gap-x-2">
+              Recent sessions
+              <span class="flex-1 h-px bg-white/10"></span>
+            </h3>
+            <div class="table-wrapper overflow-hidden rounded-3xl border border-white/10">
+              <table class="w-full">
+                <thead>
+                  <tr class="text-xs uppercase text-white/60 border-b border-white/10">
+                    <th class="py-5 px-8 text-left">Date</th>
+                    <th class="py-5 px-8 text-left">Drill</th>
+                    <th class="py-5 px-8 text-right">Duration</th>
+                    <th class="py-5 px-8 text-left">Notes</th>
+                    <th class="py-5 px-8 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-white/10">
+                  {% for s in sessions %}
+                  <tr class="animate-in" style="animation-delay: {{ loop.index * 80 }}ms">
+                    <td class="py-5 px-8">{{ s.date }}</td>
+                    <td class="py-5 px-8 font-medium">{{ s.drill }}</td>
+                    <td class="py-5 px-8 text-right font-semibold">{{ s.duration }} min</td>
+                    <td class="py-5 px-8 text-white/70">{{ s.notes or '—' }}</td>
+                    <td class="py-5 px-8 text-right">
+                      <form method="POST" action="{{ url_for('delete_session', session_id=s.id) }}" onsubmit="return confirm('Delete this session?');">
+                        <button type="submit" class="text-red-400 hover:text-red-300 text-sm font-semibold">Delete</button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% else %}
+                  <tr>
+                    <td colspan="4" class="px-8 py-12 text-center text-white/40">No sessions yet. Add your first one below.</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        
+        <!-- ADD SESSION FORM (right) -->
+        <section id="session-form" class="lg:col-span-5 glass rounded-3xl p-8 card-hover">
+          <h2 class="text-2xl font-semibold mb-8">Add training session</h2>
+          
+          <form class="space-y-8" method="POST" action="/">
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-white/70 block">Training date</label>
+              <input name="date" type="date" required 
+                     class="w-full bg-white/10 border border-white/20 focus:border-[#3b82f6] rounded-3xl px-6 py-5 text-white outline-none">
+            </div>
+            
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-white/70 block">Drill / focus</label>
+              <input name="drill" type="text" placeholder="e.g. Dribbling, Shooting, Passing" required
+                     class="w-full bg-white/10 border border-white/20 focus:border-[#3b82f6] rounded-3xl px-6 py-5 text-white outline-none">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-white/70 block">Duration (minutes)</label>
+                <input name="duration" type="number" min="1" placeholder="45" required
+                       class="w-full bg-white/10 border border-white/20 focus:border-[#3b82f6] rounded-3xl px-6 py-5 text-white outline-none">
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-white/70 block">Notes</label>
+                <input name="notes" type="text" placeholder="Felt strong today..."
+                       class="w-full bg-white/10 border border-white/20 focus:border-[#3b82f6] rounded-3xl px-6 py-5 text-white outline-none">
+              </div>
+            </div>
+            
+            <button type="submit" 
+                    class="btn-premium w-full h-16 bg-gradient-to-r from-[#3b82f6] to-[#10b981] text-white font-semibold text-xl rounded-3xl flex items-center justify-center shadow-2xl">
+              SAVE SESSION
+            </button>
+          </form>
+        </section>
+      </div>
+    </main>
+    
+    <footer class="mt-16 text-center text-white/40 text-sm">
+      Track every session with clarity and speed • Made with premium care
+    </footer>
+  </div>
+
+  <script>
+    // Tailwind initialization
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+    
+    // Smooth metric counter (Apple/Nike feel)
+    function animateCounter(el, target, duration = 1600) {
+      let start = 0;
+      const increment = Math.ceil(target / (duration / 16));
+      
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= target) {
+          start = target;
+          clearInterval(timer);
+        }
+        el.textContent = start;
+      }, 16);
+    }
+    
+    // Trigger counters when visible
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const sessionsEl = document.getElementById('total-sessions');
+            const minutesEl = document.getElementById('total-minutes');
+            
+            if (sessionsEl) animateCounter(sessionsEl, parseInt(sessionsEl.textContent) || 42);
+            if (minutesEl) animateCounter(minutesEl, parseInt(minutesEl.textContent) || 1240);
+            
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.6 });
+      
+      const metricsSection = document.querySelector('.glass');
+      if (metricsSection) observer.observe(metricsSection);
+      
+      // Extra polish: subtle scroll indicator on load
+      console.log('%c🚀 TrackPro premium UI loaded – smooth like Apple, powerful like Nike', 'color:#3b82f6; font-family:monospace; font-size:10px');
+    });
+  </script>
+</body>
+</html>

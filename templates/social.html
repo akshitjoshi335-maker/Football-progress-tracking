@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social - TrackPro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; }
+    .glass { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); }
+    .hero-bg { background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.20) 0%, transparent 45%), radial-gradient(circle at 70% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 45%); }
+    .profile-avatar { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .profile-avatar:hover { transform: scale(1.05); box-shadow: 0 0 0 16px rgba(59, 130, 246, 0.12); }
+    .card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .card-hover:hover { transform: translateY(-4px); }
+  </style>
+</head>
+<body class="hero-bg bg-[#0b1218] text-[#eef2f7] min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <header class="glass rounded-3xl px-8 py-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sticky top-6 z-50">
+      <div class="flex items-center gap-x-4">
+        <div class="w-12 h-12 rounded-3xl bg-gradient-to-br from-[#3b82f6] to-[#10b981] flex items-center justify-center text-3xl">⚽</div>
+        <div>
+          <h1 class="text-3xl font-semibold tracking-[-0.04em]">TrackPro Social</h1>
+          <p class="text-white/70 text-sm mt-1">Explore every athlete profile, bio and stats in one place.</p>
+        </div>
+      </div>
+      <nav class="flex flex-wrap items-center gap-2 text-sm font-medium">
+        {% if current_user.role == 'admin' %}
+        <a href="/admin" class="px-5 py-3 rounded-3xl hover:bg-white/10">Control Panel</a>
+        <a href="/social" class="px-5 py-3 rounded-3xl bg-white/10 text-white">Social</a>
+        <a href="/leaderboard" class="px-5 py-3 rounded-3xl hover:bg-white/10">Leaderboard</a>
+        {% else %}
+        <a href="/" class="px-5 py-3 rounded-3xl hover:bg-white/10">Dashboard</a>
+        <a href="/analytics" class="px-5 py-3 rounded-3xl hover:bg-white/10">Analytics</a>
+        <a href="/goals" class="px-5 py-3 rounded-3xl hover:bg-white/10">Goals</a>
+        <a href="/badges" class="px-5 py-3 rounded-3xl hover:bg-white/10">Badges</a>
+        <a href="/chat" class="px-5 py-3 rounded-3xl hover:bg-white/10">Chat</a>
+        <a href="/social" class="px-5 py-3 rounded-3xl bg-white/10 text-white">Social</a>
+        <a href="/profile" class="px-5 py-3 rounded-3xl hover:bg-white/10">Profile</a>
+        {% endif %}
+        <a href="/logout" class="px-5 py-3 rounded-3xl text-red-400 hover:bg-red-400/10">Logout</a>
+      </nav>
+    </header>
+
+    <main class="mt-12 space-y-8">
+      <section class="glass rounded-3xl p-8">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div>
+            <h2 class="text-4xl font-semibold tracking-[-0.04em]">All athlete profiles</h2>
+            <p class="text-white/70 mt-3 max-w-2xl">Every account is visible here, with bio, avatar, and training stats. No follow buttons — everyone is already connected.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            {% if current_user.role == 'admin' %}
+            <a href="/admin" class="px-6 py-3 rounded-3xl bg-gradient-to-r from-[#3b82f6] to-[#10b981] text-white font-semibold">Control Panel</a>
+            {% else %}
+            <a href="/profile" class="px-6 py-3 rounded-3xl bg-gradient-to-r from-[#3b82f6] to-[#10b981] text-white font-semibold">Edit your profile</a>
+            {% endif %}
+            {% if selected_user %}
+            <a href="/social" class="px-6 py-3 rounded-3xl border border-white/20 text-white/80 hover:text-white">Back to directory</a>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+
+      <div class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr]">
+        <section class="glass rounded-3xl p-8">
+          {% if selected_user %}
+          <div class="flex flex-col lg:flex-row lg:items-center gap-8">
+            <div class="flex items-center justify-center w-40 h-40 rounded-full bg-white/10 overflow-hidden profile-avatar">
+              {% if selected_user.avatar_path %}
+              <img src="/static/uploads/avatars/{{ selected_user.avatar_path }}" alt="{{ selected_user.display_name }}" class="w-full h-full object-cover">
+              {% else %}
+              <div class="w-full h-full flex items-center justify-center text-6xl">⚽</div>
+              {% endif %}
+            </div>
+            <div class="space-y-3">
+              <div class="flex flex-wrap items-center gap-3">
+                <h3 class="text-4xl font-semibold">{{ selected_user.display_name }}</h3>
+                <span class="text-white/60 text-sm">@{{ selected_user.username }}</span>
+              </div>
+              <p class="text-white/70 max-w-2xl">{{ selected_user.bio or 'No bio yet. This user hasn\'t added details.' }}</p>
+              <div class="flex flex-wrap gap-4 mt-4 text-sm text-white/70">
+                <div class="px-4 py-3 bg-white/5 rounded-3xl">Sessions: {{ total_sessions }}</div>
+                <div class="px-4 py-3 bg-white/5 rounded-3xl">Connected: Everyone</div>
+                {% if selected_user.id == current_user_id %}
+                <div class="px-4 py-3 bg-emerald-500/10 rounded-3xl text-emerald-300">This is you</div>
+                {% endif %}
+                {% if current_user.role == 'admin' %}
+                <div class="px-4 py-3 bg-blue-500/10 rounded-3xl text-blue-200">Admin access</div>
+                {% endif %}
+              </div>
+              {% if current_user.role == 'admin' %}
+              <div class="mt-6">
+                <a href="{{ url_for('profile', target_user_id=selected_user.id) }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-3xl bg-gradient-to-r from-[#3b82f6] to-[#10b981] text-white font-semibold">Edit profile</a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% else %}
+          <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {% for u in users %}
+            <a href="{{ url_for('social_profile', user_id=u.id) }}" class="card-hover glass rounded-3xl p-6 hover:bg-white/10 transition-all">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">
+                  {% if u.avatar_path %}
+                  <img src="/static/uploads/avatars/{{ u.avatar_path }}" alt="{{ u.display_name }}" class="w-full h-full object-cover">
+                  {% else %}
+                  <div class="text-2xl">⚽</div>
+                  {% endif %}
+                </div>
+                <div>
+                  <p class="font-semibold text-lg">{{ u.display_name }}</p>
+                  <p class="text-white/60 text-sm">@{{ u.username }}</p>
+                </div>
+              </div>
+              <p class="text-white/70 text-sm">{{ u.bio or 'No bio set yet.' }}</p>
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </section>
+
+        <aside class="glass rounded-3xl p-6">
+          <div class="mb-6">
+            <h3 class="text-xl font-semibold">Browse profiles</h3>
+            <p class="text-white/60 text-sm mt-2">Tap any profile to see a full view.</p>
+          </div>
+          <div class="space-y-4">
+            {% for u in users %}
+            <a href="{{ url_for('social_profile', user_id=u.id) }}" class="flex items-center gap-4 p-4 rounded-3xl bg-white/5 hover:bg-white/10 transition-all">
+              <div class="w-12 h-12 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">
+                {% if u.avatar_path %}
+                <img src="/static/uploads/avatars/{{ u.avatar_path }}" alt="{{ u.display_name }}" class="w-full h-full object-cover">
+                {% else %}
+                <div class="text-xl">⚽</div>
+                {% endif %}
+              </div>
+              <div>
+                <p class="font-medium">{{ u.display_name }}</p>
+                <p class="text-white/50 text-sm">@{{ u.username }}</p>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="mt-12 text-center text-white/40 text-sm">
+      Everyone is connected — browse bios and avatars across the community.
+    </footer>
+  </div>
+</body>
+</html>

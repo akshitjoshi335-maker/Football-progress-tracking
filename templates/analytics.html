@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics - TrackPro</title>
+  
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px -15px rgb(59 130 246 / 0.35);
+    }
+    
+    .metric-value {
+      font-variant-numeric: tabular-nums;
+    }
+    
+    .hero-bg {
+      background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(16, 185, 129, 0.18) 0%, transparent 50%);
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeInUp 700ms cubic-bezier(0.23, 1, 0.32, 1) backwards; }
+  </style>
+</head>
+<body class="hero-bg bg-[#0b1218] text-[#eef2f7] min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    
+    <!-- Premium Topbar -->
+    <header class="glass rounded-3xl px-8 py-5 flex items-center justify-between sticky top-6 z-50">
+      <div class="flex items-center gap-x-4">
+        <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#10b981] text-white text-3xl rounded-2xl">⚽</div>
+        <h1 class="text-3xl font-semibold tracking-[-0.04em]">TrackPro</h1>
+      </div>
+      
+      <nav class="flex items-center gap-x-2 text-sm font-medium">
+        <a href="/" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Dashboard</a>
+        <a href="/analytics" class="px-6 py-3 rounded-3xl bg-white/10 text-white flex items-center gap-x-2">Analytics</a>
+        <a href="/goals" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Goals</a>
+        <a href="/badges" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Badges</a>
+        <a href="/chat" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Chat</a>
+        <a href="/leaderboard" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Leaderboard</a>
+        <a href="/logout" class="px-6 py-3 rounded-3xl text-red-400 hover:bg-red-400/10">Logout</a>
+      </nav>
+      
+      <a href="/profile" class="flex items-center gap-x-3">
+        <div class="w-9 h-9 bg-white/10 rounded-2xl flex items-center justify-center text-2xl ring-2 ring-white/30">⚽</div>
+      </a>
+    </header>
+
+    <main class="mt-12">
+      <!-- Header -->
+      <div class="flex justify-between items-end mb-10">
+        <div>
+          <h1 class="text-5xl font-semibold tracking-[-0.04em]">Training Analytics</h1>
+          <p class="text-white/70 mt-2 text-lg">Deep insights into your performance and progress.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Metrics -->
+        <div class="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="glass rounded-3xl p-8 card-hover animate-in">
+            <p class="uppercase text-xs tracking-widest text-white/60">Weekly Average</p>
+            <p class="metric-value text-7xl font-semibold mt-4">{{ analytics.weekly_avg }}</p>
+            <p class="text-white/70 mt-2">minutes per week</p>
+          </div>
+          
+          <div class="glass rounded-3xl p-8 card-hover animate-in" style="animation-delay: 100ms">
+            <p class="uppercase text-xs tracking-widest text-white/60">Monthly Average</p>
+            <p class="metric-value text-7xl font-semibold mt-4">{{ analytics.monthly_avg }}</p>
+            <p class="text-white/70 mt-2">minutes per month</p>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="lg:col-span-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <!-- Weekly Trends -->
+          <div class="glass rounded-3xl p-8 card-hover animate-in">
+            <h3 class="text-xl font-semibold mb-6">Weekly Trends</h3>
+            <canvas id="weeklyChart" height="120"></canvas>
+          </div>
+          
+          <!-- Monthly Trends -->
+          <div class="glass rounded-3xl p-8 card-hover animate-in" style="animation-delay: 150ms">
+            <h3 class="text-xl font-semibold mb-6">Monthly Trends</h3>
+            <canvas id="monthlyChart" height="120"></canvas>
+          </div>
+        </div>
+
+        <!-- Top Drills -->
+        <div class="lg:col-span-12 glass rounded-3xl p-8 card-hover animate-in">
+          <h2 class="text-2xl font-semibold mb-8">Top Training Drills</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% if analytics.best_drills %}
+              {% for drill in analytics.best_drills %}
+              <div class="glass rounded-3xl p-6 hover:bg-white/10 transition-all">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="font-semibold text-lg">{{ drill.drill }}</p>
+                    <p class="text-white/60 text-sm mt-1">{{ drill.count }} sessions</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-4xl font-semibold text-emerald-400">{{ drill.total }}</p>
+                    <p class="text-xs text-white/50">minutes</p>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            {% else %}
+              <p class="col-span-3 text-center py-12 text-white/50">No analytics data yet. Start logging sessions!</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="mt-16 text-center text-white/40 text-sm">
+      Data-driven training • Powered by consistency
+    </footer>
+  </div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    tailwind.config = { content: ["*"] };
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      const weeklyData = {{ analytics.weekly_trends|tojson | safe }};
+      const monthlyData = {{ analytics.monthly_trends|tojson | safe }};
+      
+      // Weekly Line Chart
+      new Chart(document.getElementById('weeklyChart'), {
+        type: 'line',
+        data: {
+          labels: weeklyData.map(d => d.day),
+          datasets: [{
+            data: weeklyData.map(d => d.minutes),
+            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(56, 189, 248, 0.15)',
+            borderWidth: 4,
+            tension: 0.4,
+            pointRadius: 0,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.08)' } },
+            x: { grid: { color: 'rgba(255,255,255,0.08)' } }
+          },
+          elements: { line: { borderJoinStyle: 'round' } }
+        }
+      });
+      
+      // Monthly Bar Chart
+      new Chart(document.getElementById('monthlyChart'), {
+        type: 'bar',
+        data: {
+          labels: monthlyData.map(d => d.week),
+          datasets: [{
+            data: monthlyData.map(d => d.minutes),
+            backgroundColor: '#34d399',
+            borderRadius: 12,
+            barThickness: 28
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.08)' } },
+            x: { grid: { color: 'rgba(255,255,255,0.08)' } }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
