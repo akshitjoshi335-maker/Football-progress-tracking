@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Goals - Football Training Tracker</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/static/css/style-new.css">
+
+<style>
+
+.goal-card{
+background: linear-gradient(135deg, rgba(54,162,235,0.15), rgba(76,175,80,0.15));
+border:1px solid rgba(255,255,255,0.1);
+border-radius:16px;
+padding:20px;
+transition:0.3s;
+}
+
+.goal-card:hover{
+transform:translateY(-4px);
+background: linear-gradient(135deg, rgba(54,162,235,0.25), rgba(76,175,80,0.25));
+}
+
+.goal-title{
+font-weight:600;
+font-size:1.2rem;
+color:white;
+}
+
+.goal-meta{
+color:#b3b3b3;
+font-size:0.9rem;
+}
+
+.progress{
+height:10px;
+border-radius:10px;
+background:rgba(255,255,255,0.1);
+}
+
+.progress-bar{
+background:linear-gradient(90deg,#36a2eb,#4caf50);
+}
+
+.goal-complete-btn{
+border-radius:30px;
+}
+
+.goal-completed{
+opacity:0.6;
+}
+
+</style>
+
+</head>
+
+<body class="bg-gradient">
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+<div class="container-fluid">
+
+<a class="navbar-brand d-flex align-items-center" href="/">
+<span class="brand-badge me-2">⚽</span>
+<span>TrackPro</span>
+</a>
+
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+<span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="mainNav">
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+<li class="nav-item"><a class="nav-link" href="/analytics">Analytics</a></li>
+<li class="nav-item"><a class="nav-link active" href="/goals">Goals</a></li>
+<li class="nav-item"><a class="nav-link" href="/badges">Badges</a></li>
+<li class="nav-item"><a class="nav-link" href="/chat">Chat</a></li>
+<li class="nav-item"><a class="nav-link" href="/leaderboard">Leaderboard</a></li>
+<li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+
+</ul>
+</div>
+
+</div>
+</nav>
+
+
+<div class="container py-5">
+
+<header class="text-center mb-5 animate-in" style="--delay:0.06s">
+
+<h1 class="display-4 fw-bold text-green">Training Goals 🎯</h1>
+
+<p class="lead text-light">
+Set targets and track your progress
+</p>
+
+</header>
+
+
+<!-- CREATE GOAL -->
+
+<div class="card glass shadow mb-5 animate-in" style="--delay:0.14s">
+
+<div class="card-body">
+
+<h4 class="mb-4">Create New Goal</h4>
+
+<form method="POST" action="/goals" class="row g-3">
+
+<div class="col-md-6">
+
+<label class="form-label text-muted small">Goal Name</label>
+
+<input type="text" class="form-control form-control-lg form-control-custom"
+name="goal_name" placeholder="Example: 100 minutes dribbling" required>
+
+</div>
+
+
+<div class="col-md-3">
+
+<label class="form-label text-muted small">Target</label>
+
+<input type="number" class="form-control form-control-lg form-control-custom"
+name="target_value" min="1" required>
+
+</div>
+
+
+<div class="col-md-3">
+
+<label class="form-label text-muted small">Type</label>
+
+<select class="form-control form-control-lg form-control-custom"
+name="target_type">
+
+<option value="minutes">Minutes</option>
+<option value="sessions">Sessions</option>
+<option value="drills">Drills</option>
+
+</select>
+
+</div>
+
+
+<div class="col-md-6">
+
+<label class="form-label text-muted small">Due Date</label>
+
+<input type="date" class="form-control form-control-lg form-control-custom"
+name="due_date">
+
+</div>
+
+
+<div class="col-12">
+
+<button class="btn btn-success btn-lg w-100">
+Create Goal
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+
+
+<!-- GOALS -->
+
+<h4 class="text-white mb-4 animate-in" style="--delay:0.22s">Your Goals</h4>
+
+{% if goals %}
+
+<div class="row g-4">
+
+{% for goal in goals %}
+
+<div class="col-md-6 col-lg-4">
+
+<div class="goal-card {% if goal.completed %}goal-completed{% endif %}">
+
+<div class="d-flex justify-content-between">
+
+<div class="goal-title">
+
+{% if goal.completed %}✅{% endif %}
+
+{{ goal.name }}
+
+</div>
+
+</div>
+
+
+<div class="goal-meta mt-2">
+
+Target:
+<strong>{{ goal.target_value }} {{ goal.target_type }}</strong>
+
+{% if goal.due_date %}
+<br>Due: <strong>{{ goal.due_date }}</strong>
+{% endif %}
+
+</div>
+
+
+<!-- PROGRESS BAR -->
+
+<div class="progress mt-3">
+
+<div class="progress-bar"
+
+style="width: {{ goal.progress }}%">
+
+</div>
+
+</div>
+
+<div class="small text-muted mt-1">
+{{ goal.progress }}% complete
+</div>
+
+
+{% if not goal.completed %}
+
+<button
+class="btn btn-primary btn-sm mt-3 goal-complete-btn goal-complete"
+data-goal-id="{{ goal.id }}">
+
+Mark Complete
+
+</button>
+
+{% endif %}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% else %}
+
+<p class="text-muted text-center py-5">
+No goals yet. Create one to start improving!
+</p>
+
+{% endif %}
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+document.querySelectorAll('.goal-complete').forEach(btn => {
+
+btn.addEventListener('click', async function(){
+
+const goalId = this.dataset.goalId;
+
+try{
+
+const resp = await fetch(`/goal/complete/${goalId}`, {method:'POST'})
+
+if(resp.ok){
+
+location.reload()
+
+}
+
+}catch(err){
+
+alert("Error completing goal")
+
+}
+
+})
+
+})
+
+</script>
+<script src="/static/js/ui-smooth.js" defer></script>
+</body>
+</html>
