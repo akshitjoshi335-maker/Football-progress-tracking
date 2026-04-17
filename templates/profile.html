@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - TrackPro</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    }
+    
+    .avatar {
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .avatar:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 0 12px rgba(59, 130, 246, 0.2);
+    }
+    
+    .hero-bg {
+      background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(16, 185, 129, 0.18) 0%, transparent 50%);
+    }
+    
+    input[type="file"] {
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body class="hero-bg bg-[#0b1218] text-[#eef2f7] min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    
+    <!-- Premium Topbar -->
+    <header class="glass rounded-3xl px-8 py-5 flex items-center justify-between sticky top-6 z-50">
+      <div class="flex items-center gap-x-4">
+        <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#10b981] text-white text-3xl rounded-2xl">⚽</div>
+        <h1 class="text-3xl font-semibold tracking-[-0.04em]">TrackPro</h1>
+      </div>
+      
+      <nav class="flex items-center gap-x-2 text-sm font-medium">
+        <a href="/" class="px-6 py-3 rounded-3xl hover:bg-white/10">Dashboard</a>
+        <a href="/analytics" class="px-6 py-3 rounded-3xl hover:bg-white/10">Analytics</a>
+        <a href="/goals" class="px-6 py-3 rounded-3xl hover:bg-white/10">Goals</a>
+        <a href="/badges" class="px-6 py-3 rounded-3xl hover:bg-white/10">Badges</a>
+        <a href="/chat" class="px-6 py-3 rounded-3xl hover:bg-white/10">Chat</a>
+        <a href="/leaderboard" class="px-6 py-3 rounded-3xl hover:bg-white/10">Leaderboard</a>
+        <a href="/logout" class="px-6 py-3 rounded-3xl text-red-400 hover:bg-red-400/10">Logout</a>
+      </nav>
+      
+      <a href="/profile" class="px-6 py-3 rounded-3xl bg-white/10 text-white">Profile</a>
+    </header>
+
+    <main class="mt-12 max-w-2xl mx-auto">
+      <div class="glass rounded-3xl p-10">
+        <div class="text-center mb-10">
+          <h1 class="text-4xl font-semibold tracking-[-0.04em]">Edit Profile</h1>
+          <p class="text-white/70 mt-2">Make your profile truly yours</p>
+        </div>
+
+        <form method="POST" action="/profile" enctype="multipart/form-data" class="space-y-10">
+          
+          <!-- Avatar Section -->
+          <div class="flex flex-col items-center gap-6">
+            {% if user and user.avatar_path %}
+              <img src="/static/uploads/avatars/{{ user.avatar_path }}" 
+                   alt="avatar" 
+                   class="avatar w-32 h-32 rounded-full object-cover border-4 border-white/20 shadow-2xl">
+            {% else %}
+              <div class="avatar w-32 h-32 rounded-full bg-white/10 flex items-center justify-center text-6xl border-4 border-white/20">
+                ⚽
+              </div>
+            {% endif %}
+            
+            <div class="text-center">
+              <label for="avatar" 
+                     class="cursor-pointer inline-block px-8 py-3 bg-white/10 hover:bg-white/20 rounded-3xl text-sm font-medium transition-colors">
+                Change Avatar
+              </label>
+              <input id="avatar" name="avatar" type="file" accept="image/*" class="hidden">
+              <p class="text-xs text-white/50 mt-3">PNG or JPG • Max 2MB</p>
+            </div>
+          </div>
+
+          <!-- Form Fields -->
+          <div class="space-y-8">
+            <div>
+              <label class="block text-sm font-medium text-white/70 mb-3">Display Name</label>
+              <input type="text" 
+                     id="display_name" 
+                     name="display_name" 
+                     value="{{ user.display_name or user.username }}"
+                     class="w-full bg-white/10 border border-white/20 focus:border-[#3b82f6] rounded-3xl px-7 py-6 outline-none text-lg">
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-white/70 mb-3">Bio</label>
+              <textarea id="bio" 
+                        name="bio" 
+                        rows="4"
+                        class="w-full bg-white/10 border border-white/20 focus:border-[#3b82f6] rounded-3xl px-7 py-6 outline-none resize-none">{{ user.bio or '' }}</textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-white/70 mb-3">New Password</label>
+                <input type="password" 
+                       id="password" 
+                       name="password" 
+                       placeholder="Leave blank to keep current"
+                       class="w-full bg-white/10 border border-white/20 focus:border-[#3b82f6] rounded-3xl px-7 py-6 outline-none">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-white/70 mb-3">Confirm Password</label>
+                <input type="password" 
+                       id="confirm_password" 
+                       name="confirm_password" 
+                       placeholder="Confirm new password"
+                       class="w-full bg-white/10 border border-white/20 focus:border-[#3b82f6] rounded-3xl px-7 py-6 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex gap-4 pt-6">
+            <button type="submit" 
+                    class="flex-1 h-16 bg-gradient-to-r from-[#3b82f6] to-[#10b981] text-white font-semibold text-xl rounded-3xl hover:brightness-110 transition-all">
+              Save Changes
+            </button>
+            <a href="/" 
+               class="flex-1 h-16 flex items-center justify-center border border-white/30 hover:border-white/60 rounded-3xl font-medium text-lg">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="mt-16 text-center text-white/40 text-sm">
+      Your profile • Your identity • Your journey
+    </footer>
+  </div>
+
+  <script>
+    tailwind.config = { content: ["*"] };
+  </script>
+</body>
+</html>

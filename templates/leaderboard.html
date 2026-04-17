@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard - TrackPro</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    }
+    
+    .rank-card {
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .rank-card:hover {
+      transform: translateY(-8px);
+    }
+    
+    .hero-bg {
+      background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(234, 179, 8, 0.18) 0%, transparent 50%);
+    }
+    
+    table {
+      border-collapse: separate;
+      border-spacing: 0 8px;
+    }
+    
+    tr {
+      transition: all 0.3s ease;
+    }
+    
+    tr:hover {
+      transform: scale(1.02);
+      background: rgba(255,255,255,0.08) !important;
+    }
+    
+    .highlight {
+      background: rgba(59, 130, 246, 0.15) !important;
+      border-left: 4px solid #3b82f6;
+    }
+  </style>
+</head>
+<body class="hero-bg bg-[#0b1218] text-[#eef2f7] min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    
+    <!-- Premium Topbar -->
+    <header class="glass rounded-3xl px-8 py-5 flex items-center justify-between sticky top-6 z-50">
+      <div class="flex items-center gap-x-4">
+        <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#10b981] text-white text-3xl rounded-2xl">⚽</div>
+        <h1 class="text-3xl font-semibold tracking-[-0.04em]">TrackPro</h1>
+      </div>
+      
+      <nav class="flex items-center gap-x-2 text-sm font-medium">
+        <a href="/" class="px-6 py-3 rounded-3xl hover:bg-white/10">Dashboard</a>
+        <a href="/analytics" class="px-6 py-3 rounded-3xl hover:bg-white/10">Analytics</a>
+        <a href="/goals" class="px-6 py-3 rounded-3xl hover:bg-white/10">Goals</a>
+        <a href="/badges" class="px-6 py-3 rounded-3xl hover:bg-white/10">Badges</a>
+        <a href="/chat" class="px-6 py-3 rounded-3xl hover:bg-white/10">Chat</a>
+        <a href="/leaderboard" class="px-6 py-3 rounded-3xl bg-white/10 text-white">Leaderboard</a>
+        <a href="/logout" class="px-6 py-3 rounded-3xl text-red-400 hover:bg-red-400/10">Logout</a>
+      </nav>
+      
+      <a href="/profile" class="flex items-center gap-x-3">
+        <div class="w-9 h-9 bg-white/10 rounded-2xl flex items-center justify-center text-2xl ring-2 ring-white/30">⚽</div>
+      </a>
+    </header>
+
+    <main class="mt-12">
+      <div class="flex justify-between items-end mb-12">
+        <div>
+          <h1 class="text-5xl font-semibold tracking-[-0.04em]">Leaderboard</h1>
+          <p class="text-white/70 mt-2 text-lg">See where you stand among the best players</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Top Performers Table -->
+        <div class="lg:col-span-8 glass rounded-3xl p-8">
+          <h2 class="text-2xl font-semibold mb-8">Top Performers</h2>
+          
+          <div class="overflow-hidden rounded-3xl">
+            <table class="w-full">
+              <thead>
+                <tr class="text-xs uppercase text-white/60 border-b border-white/10">
+                  <th class="py-5 px-8 text-left font-medium">Rank</th>
+                  <th class="py-5 px-8 text-left font-medium">Player</th>
+                  <th class="py-5 px-8 text-right font-medium">Sessions</th>
+                  <th class="py-5 px-8 text-right font-medium">Total Minutes</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/10">
+                {% for row in leaderboard %}
+                <tr class="{% if row.id == current_user_id %}highlight{% endif %}">
+                  <td class="py-6 px-8 font-semibold text-lg">#{{ loop.index }}</td>
+                  <td class="py-6 px-8">
+                    <div class="font-medium">{{ row.display_name }}</div>
+                  </td>
+                  <td class="py-6 px-8 text-right font-semibold">{{ row.total_sessions }}</td>
+                  <td class="py-6 px-8 text-right font-semibold text-emerald-400">{{ row.total_minutes }} min</td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="4" class="text-center py-16 text-white/50">No leaderboard data yet. Start logging sessions!</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Your Rank + Tips -->
+        <div class="lg:col-span-4 space-y-8">
+          
+          <!-- Your Rank -->
+          <div class="glass rounded-3xl p-8 rank-card">
+            <h2 class="text-xl font-semibold mb-6">Your Rank</h2>
+            {% if current_rank %}
+            <div class="text-center">
+              <div class="text-[6.5rem] leading-none font-bold text-white">#{{ current_rank }}</div>
+              <p class="text-emerald-400 text-xl font-medium mt-2">Keep pushing • You're climbing!</p>
+            </div>
+            {% else %}
+            <div class="text-center py-8">
+              <div class="text-7xl opacity-30 mb-4">🏅</div>
+              <p class="text-white/70">Log more sessions to appear on the leaderboard</p>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- Tips -->
+          <div class="glass rounded-3xl p-8 rank-card">
+            <h2 class="text-xl font-semibold mb-6">Pro Tips</h2>
+            <ul class="space-y-5 text-white/80">
+              <li class="flex gap-4">
+                <span class="text-2xl">📌</span>
+                <div>Log every training session consistently</div>
+              </li>
+              <li class="flex gap-4">
+                <span class="text-2xl">⏱️</span>
+                <div>Track accurate duration for each drill</div>
+              </li>
+              <li class="flex gap-4">
+                <span class="text-2xl">🎯</span>
+                <div>Use Goals to stay focused and motivated</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="mt-16 text-center text-white/40 text-sm">
+      Compete. Improve. Dominate.
+    </footer>
+  </div>
+
+  <script>
+    tailwind.config = { content: ["*"] };
+  </script>
+</body>
+</html>

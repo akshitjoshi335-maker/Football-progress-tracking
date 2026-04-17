@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coach Chat - TrackPro</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    }
+    
+    .message-bubble {
+      transition: all 0.3s ease;
+    }
+    
+    .hero-bg {
+      background: radial-gradient(circle at 30% 20%, rgba(52, 211, 153, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.18) 0%, transparent 50%);
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeInUp 600ms cubic-bezier(0.23, 1, 0.32, 1) backwards; }
+  </style>
+</head>
+<body class="hero-bg bg-[#0b1218] text-[#eef2f7] min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    
+    <!-- Premium Topbar -->
+    <header class="glass rounded-3xl px-8 py-5 flex items-center justify-between sticky top-6 z-50">
+      <div class="flex items-center gap-x-4">
+        <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#10b981] text-white text-3xl rounded-2xl">⚽</div>
+        <h1 class="text-3xl font-semibold tracking-[-0.04em]">TrackPro</h1>
+      </div>
+      
+      <nav class="flex items-center gap-x-2 text-sm font-medium">
+        <a href="/" class="px-6 py-3 rounded-3xl hover:bg-white/10">Dashboard</a>
+        <a href="/analytics" class="px-6 py-3 rounded-3xl hover:bg-white/10">Analytics</a>
+        <a href="/goals" class="px-6 py-3 rounded-3xl hover:bg-white/10">Goals</a>
+        <a href="/badges" class="px-6 py-3 rounded-3xl hover:bg-white/10">Badges</a>
+        <a href="/chat" class="px-6 py-3 rounded-3xl bg-white/10 text-white">Chat</a>
+        <a href="/leaderboard" class="px-6 py-3 rounded-3xl hover:bg-white/10">Leaderboard</a>
+        <a href="/logout" class="px-6 py-3 rounded-3xl text-red-400 hover:bg-red-400/10">Logout</a>
+      </nav>
+      
+      <a href="/profile" class="flex items-center gap-x-3">
+        <div class="w-9 h-9 bg-white/10 rounded-2xl flex items-center justify-center text-2xl ring-2 ring-white/30">⚽</div>
+      </a>
+    </header>
+
+    <main class="mt-12">
+      <div class="flex justify-between items-end mb-10">
+        <div>
+          <h1 class="text-5xl font-semibold tracking-[-0.04em]">Coach Chat</h1>
+          <p class="text-white/70 mt-2 text-lg">Stay connected with your coach • All conversations in one place</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[calc(100vh-220px)]">
+        
+        <!-- Conversations List -->
+        <div class="lg:col-span-4 glass rounded-3xl p-6 flex flex-col">
+          <h2 class="text-xl font-semibold mb-6 px-2">Conversations</h2>
+          
+          <div class="flex-1 overflow-y-auto space-y-3 custom-scroll">
+            {% for user in users %}
+            <a href="{{ url_for('chat_with', recipient_id=user.id) }}" 
+               class="block glass rounded-3xl p-5 hover:bg-white/10 transition-all {% if selected_user and selected_user.id == user.id %}ring-2 ring-[#10b981]{% endif %}">
+              <div class="flex justify-between">
+                <div>
+                  <p class="font-semibold">{{ user.display_name }}</p>
+                  <p class="text-white/60 text-sm mt-1">{{ user.preview or 'Start a conversation' }}</p>
+                </div>
+                {% if user.unread %}
+                <div class="bg-emerald-500 text-white text-xs font-medium px-3 h-6 rounded-full flex items-center">
+                  {{ user.unread }} new
+                </div>
+                {% endif %}
+              </div>
+            </a>
+            {% else %}
+            <div class="text-center py-12 text-white/50">
+              No conversations yet.<br>Start chatting with your coach.
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="lg:col-span-8 glass rounded-3xl flex flex-col h-full">
+          {% if selected_user %}
+            <div class="p-6 border-b border-white/10 flex items-center gap-4">
+              <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-3xl">👨‍🏫</div>
+              <div>
+                <h3 class="font-semibold text-xl">{{ selected_user.display_name }}</h3>
+                <p class="text-white/60 text-sm">{{ selected_user.role or 'Coach' }}</p>
+              </div>
+            </div>
+
+            <!-- Messages -->
+            <div id="chatScroll" class="flex-1 p-6 overflow-y-auto space-y-6 custom-scroll">
+              {% for msg in conversation %}
+              <div class="flex {% if msg.sender_id == current_user_id %}justify-end{% endif %}">
+                <div class="max-w-[75%]">
+                  <div class="message-bubble px-6 py-4 rounded-3xl 
+                              {% if msg.sender_id == current_user_id %}bg-gradient-to-br from-[#3b82f6] to-[#10b981] text-white{% else %}bg-white/10{% endif %}">
+                    {{ msg.body }}
+                  </div>
+                  <div class="text-xs text-white/50 mt-2 px-2 flex justify-between">
+                    <span>{{ msg.created_at }}</span>
+                    {% if msg.sender_id == current_user_id %}
+                    <form method="POST" action="{{ url_for('unsend_message', recipient_id=selected_user.id, message_id=msg.id) }}" class="inline">
+                      <button type="submit" class="hover:text-red-400">Unsend</button>
+                    </form>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% else %}
+              <div class="text-center py-20 text-white/50">
+                Send the first message to start the conversation.
+              </div>
+              {% endfor %}
+            </div>
+
+            <!-- Message Input -->
+            <form method="POST" action="{{ url_for('chat_with', recipient_id=selected_user.id) }}" 
+                  class="p-6 border-t border-white/10 flex gap-4">
+              <input type="text" name="body" placeholder="Write a message..." required
+                     class="flex-1 bg-white/10 border border-white/20 focus:border-emerald-400 rounded-3xl px-6 py-5 outline-none">
+              <button type="submit"
+                      class="px-10 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-3xl hover:brightness-110">
+                Send
+              </button>
+            </form>
+          {% else %}
+          <div class="flex-1 flex items-center justify-center text-center">
+            <div>
+              <div class="text-8xl mb-6 opacity-30">💬</div>
+              <h3 class="text-2xl font-medium mb-3">Select a conversation</h3>
+              <p class="text-white/60 max-w-xs mx-auto">Choose a contact from the left to begin chatting with your coach.</p>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </main>
+
+    <footer class="mt-12 text-center text-white/40 text-sm">
+      Real-time coach communication • Built for serious athletes
+    </footer>
+  </div>
+
+  <script>
+    tailwind.config = { content: ["*"] };
+    
+    // Auto-scroll to bottom of chat
+    const chatScroll = document.getElementById('chatScroll');
+    if (chatScroll) {
+      chatScroll.scrollTop = chatScroll.scrollHeight;
+    }
+  </script>
+</body>
+</html>

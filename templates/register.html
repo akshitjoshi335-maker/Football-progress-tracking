@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - TrackPro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    
+    .hero-bg {
+      background: linear-gradient(135deg, #0b1218 0%, #1e2937 100%);
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .input-field {
+      transition: all 0.3s ease;
+    }
+    .input-field:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+  </style>
+</head>
+<body class="hero-bg min-h-screen flex items-center justify-center text-[#eef2f7]">
+  <div class="max-w-md w-full px-6 py-12">
+    
+    <!-- Brand -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center gap-3 mb-4">
+        <div class="w-14 h-14 bg-gradient-to-br from-[#3b82f6] to-[#10b981] rounded-3xl flex items-center justify-center text-4xl shadow-xl">⚽</div>
+        <h1 class="text-4xl font-bold tracking-[-0.04em]">TrackPro</h1>
+      </div>
+      <p class="text-white/70">Join the elite training community</p>
+    </div>
+
+    <div class="glass rounded-3xl p-10">
+      <h2 class="text-3xl font-semibold text-center mb-8">Create your account</h2>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="mb-6 space-y-2">
+            {% for category, message in messages %}
+              <div class="text-center text-sm py-3 rounded-2xl {{ 'bg-red-500/20 text-red-300' if category == 'error' else 'bg-emerald-500/20 text-emerald-300' }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" action="/register" class="space-y-7">
+        <div>
+          <label class="block text-sm font-medium text-white/70 mb-2">Username</label>
+          <input type="text" 
+                 name="username" 
+                 autocomplete="username"
+                 required
+                 class="input-field w-full bg-white/10 border border-white/20 rounded-3xl px-7 py-6 outline-none text-lg">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-white/70 mb-2">Password</label>
+          <input type="password" 
+                 name="password" 
+                 autocomplete="new-password"
+                 required
+                 class="input-field w-full bg-white/10 border border-white/20 rounded-3xl px-7 py-6 outline-none text-lg">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-white/70 mb-2">Confirm Password</label>
+          <input type="password" 
+                 name="confirm_password" 
+                 autocomplete="new-password"
+                 required
+                 class="input-field w-full bg-white/10 border border-white/20 rounded-3xl px-7 py-6 outline-none text-lg">
+        </div>
+
+        <button type="submit"
+                class="w-full h-16 bg-gradient-to-r from-[#3b82f6] to-[#10b981] text-white font-semibold text-xl rounded-3xl hover:brightness-110 transition-all mt-4">
+          Create Account
+        </button>
+      </form>
+
+      <div class="text-center mt-8 text-white/70">
+        Already have an account? 
+        <a href="/login" class="text-[#3b82f6] hover:underline font-medium">Sign in</a>
+      </div>
+    </div>
+
+    <div class="text-center mt-8 text-xs text-white/40">
+      Beautiful training starts here
+    </div>
+  </div>
+</body>
+</html>
