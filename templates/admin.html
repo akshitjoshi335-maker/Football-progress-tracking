@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - TrackPro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; }
+    .glass { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px); border: 1px solid rgba(255, 255, 255, 0.12); box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); }
+    .card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .card-hover:hover { transform: translateY(-6px); }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body class="bg-[#0b1218] text-[#eef2f7] min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <header class="glass rounded-3xl px-8 py-5 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sticky top-6 z-50">
+      <div class="flex items-center gap-x-4">
+        <div class="w-12 h-12 rounded-3xl bg-gradient-to-br from-[#3b82f6] to-[#10b981] flex items-center justify-center text-3xl">🛠️</div>
+        <div>
+          <h1 class="text-3xl font-semibold tracking-[-0.04em]">Admin Control Panel</h1>
+          <p class="text-white/70 text-sm mt-1">Manage accounts, view social feed access, and keep the community safe.</p>
+        </div>
+      </div>
+      <nav class="flex flex-wrap items-center gap-2 text-sm font-medium">
+        <a href="/admin" class="px-5 py-3 rounded-3xl bg-white/10 text-white">Control Panel</a>
+        <a href="/social" class="px-5 py-3 rounded-3xl hover:bg-white/10">Social</a>
+        <a href="/leaderboard" class="px-5 py-3 rounded-3xl hover:bg-white/10">Leaderboard</a>
+        <a href="/logout" class="px-5 py-3 rounded-3xl text-red-400 hover:bg-red-400/10">Logout</a>
+      </nav>
+    </header>
+
+    <main class="mt-12 space-y-8">
+      <section class="grid gap-6 lg:grid-cols-3">
+        <div class="glass rounded-3xl p-8 card-hover">
+          <p class="text-sm uppercase tracking-[0.3em] text-white/50 mb-3">Total accounts</p>
+          <p class="text-5xl font-semibold">{{ users|length }}</p>
+          <p class="text-white/60 mt-4 text-sm">All registered users except the signed-in admin.</p>
+        </div>
+        <div class="glass rounded-3xl p-8 card-hover">
+          <p class="text-sm uppercase tracking-[0.3em] text-white/50 mb-3">Administrator</p>
+          <p class="text-5xl font-semibold">{{ current_user.display_name or current_user.username }}</p>
+          <p class="text-white/60 mt-4 text-sm">Use this panel for user moderation and account updates.</p>
+        </div>
+        <div class="glass rounded-3xl p-8 card-hover">
+          <p class="text-sm uppercase tracking-[0.3em] text-white/50 mb-3">Quick actions</p>
+          <div class="space-y-3 text-sm text-white/70">
+            <div class="px-4 py-3 rounded-3xl bg-white/5">Edit a user profile from the table below.</div>
+            <div class="px-4 py-3 rounded-3xl bg-white/5">Remove inactive or suspicious accounts.</div>
+            <div class="px-4 py-3 rounded-3xl bg-white/5">Keep social and leaderboard access available.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="glass rounded-3xl p-8">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+          <div>
+            <h2 class="text-3xl font-semibold">User Management</h2>
+            <p class="text-white/70 mt-3">Review each account and edit or delete users as needed.</p>
+          </div>
+        </div>
+
+        <div class="overflow-hidden rounded-3xl border border-white/10">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="text-xs uppercase text-white/60 bg-white/5 border-b border-white/10">
+                <th class="py-4 px-6">User</th>
+                <th class="py-4 px-6">Role</th>
+                <th class="py-4 px-6">Joined</th>
+                <th class="py-4 px-6">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/10">
+              {% for u in users %}
+              <tr class="hover:bg-white/5 transition-colors">
+                <td class="py-5 px-6">
+                  <div class="font-semibold">{{ u.display_name }}</div>
+                  <div class="text-white/50 text-sm">@{{ u.username }}</div>
+                </td>
+                <td class="py-5 px-6 text-sm capitalize text-white/80">{{ u.role or 'user' }}</td>
+                <td class="py-5 px-6 text-sm text-white/60">{{ u.created_at.split(' ')[0] }}</td>
+                <td class="py-5 px-6 text-right space-x-2">
+                  <a href="{{ url_for('profile', target_user_id=u.id) }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-3xl bg-blue-500/10 text-blue-200 hover:bg-blue-500/20">Edit</a>
+                  <form method="POST" action="{{ url_for('admin_delete_user', user_id=u.id) }}" class="inline-block" onsubmit="return confirm('Delete this user permanently?');">
+                    <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-3xl bg-red-500/10 text-red-200 hover:bg-red-500/20">Delete</button>
+                  </form>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="4" class="py-20 text-center text-white/50">No users available to manage.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mt-12 text-center text-white/40 text-sm">
+      Admin panel gives you direct control without showing the normal player dashboard.
+    </footer>
+  </div>
+</body>
+</html>

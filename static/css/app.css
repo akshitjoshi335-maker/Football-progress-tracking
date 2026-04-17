@@ -1,0 +1,108 @@
+/* Shared responsive improvements for mobile screens */
+html {
+  scroll-behavior: smooth;
+}
+body {
+  min-height: 100%;
+}
+
+header {
+  /* Keep default flow for non-sticky layouts; sticky class will override as needed. */
+  position: relative;
+}
+
+header nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+header.sticky,
+header[class*="sticky"] {
+  position: relative !important;
+  top: auto !important;
+  margin-top: 0 !important;
+  z-index: 999;
+}
+
+header nav::-webkit-scrollbar {
+  display: none;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-wrapper table {
+  min-width: 640px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-wrapper td,
+.table-wrapper th {
+  white-space: normal;
+}
+
+@media (max-width: 1024px) {
+  .max-w-7xl,
+  .max-w-md,
+  .max-w-2xl {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  header {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  header.sticky,
+  header[class*="sticky"] {
+    position: relative !important;
+    top: auto !important;
+    margin-top: 0 !important;
+  }
+
+  .hero-banner {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .decorative-ball {
+    display: none !important;
+  }
+
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+
+  .mobile-gap {
+    gap: 1rem !important;
+  }
+
+  .profile-actions,
+  .form-actions {
+    flex-direction: column !important;
+  }
+
+  .table-wrapper table {
+    min-width: auto;
+  }
+
+  .hero-banner .btn-premium {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .glass.p-10 {
+    padding: 1.5rem !important;
+  }
+}

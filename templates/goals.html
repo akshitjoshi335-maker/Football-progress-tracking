@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goals - TrackPro</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px -15px rgb(59 130 246 / 0.35);
+    }
+    
+    .progress-bar {
+      transition: width 800ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .hero-bg {
+      background: radial-gradient(circle at 30% 20%, rgba(16, 185, 129, 0.25) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.18) 0%, transparent 50%);
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in { animation: fadeInUp 700ms cubic-bezier(0.23, 1, 0.32, 1) backwards; }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+</head>
+<body class="hero-bg bg-[#0b1218] text-[#eef2f7] min-h-screen">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    
+    <!-- Premium Topbar -->
+    <header class="glass rounded-3xl px-8 py-5 flex items-center justify-between sticky top-6 z-50">
+      <div class="flex items-center gap-x-4">
+        <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-[#3b82f6] to-[#10b981] text-white text-3xl rounded-2xl">⚽</div>
+        <h1 class="text-3xl font-semibold tracking-[-0.04em]">TrackPro</h1>
+      </div>
+      
+      <nav class="flex items-center gap-x-2 text-sm font-medium">
+        <a href="/" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Dashboard</a>
+        <a href="/analytics" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Analytics</a>
+        <a href="/goals" class="px-6 py-3 rounded-3xl bg-white/10 text-white flex items-center gap-x-2">Goals</a>
+        <a href="/badges" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Badges</a>
+        <a href="/chat" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Chat</a>
+        <a href="/leaderboard" class="px-6 py-3 rounded-3xl hover:bg-white/10 flex items-center gap-x-2">Leaderboard</a>
+        <a href="/logout" class="px-6 py-3 rounded-3xl text-red-400 hover:bg-red-400/10">Logout</a>
+      </nav>
+      
+      <a href="/profile" class="flex items-center gap-x-3">
+        <div class="w-9 h-9 bg-white/10 rounded-2xl flex items-center justify-center text-2xl ring-2 ring-white/30">⚽</div>
+      </a>
+    </header>
+
+    <main class="mt-12">
+      <div class="flex justify-between items-end mb-10">
+        <div>
+          <h1 class="text-5xl font-semibold tracking-[-0.04em]">Training Goals</h1>
+          <p class="text-white/70 mt-2 text-lg">Set targets. Track progress. Stay consistent.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Create New Goal -->
+        <div class="lg:col-span-5 glass rounded-3xl p-8 card-hover animate-in">
+          <h2 class="text-2xl font-semibold mb-8">Create a new goal</h2>
+          
+          <form method="POST" action="/goals" class="space-y-8">
+            <div>
+              <label class="block text-sm font-medium text-white/70 mb-2">Goal name</label>
+              <input type="text" name="goal_name" placeholder="e.g. 100 minutes dribbling" required
+                     class="w-full bg-white/10 border border-white/20 focus:border-emerald-400 rounded-3xl px-6 py-5 outline-none">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-white/70 mb-2">Target value</label>
+                <input type="number" name="target_value" min="1" placeholder="30" required
+                       class="w-full bg-white/10 border border-white/20 focus:border-emerald-400 rounded-3xl px-6 py-5 outline-none">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-white/70 mb-2">Target type</label>
+                <select name="target_type" 
+                        class="w-full bg-white/10 border border-white/20 focus:border-emerald-400 rounded-3xl px-6 py-5 outline-none">
+                  <option value="minutes">Minutes</option>
+                  <option value="sessions">Sessions</option>
+                  <option value="drills">Drills</option>
+                </select>
+              </div>
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-white/70 mb-2">Due date (optional)</label>
+              <input type="date" name="due_date"
+                     class="w-full bg-white/10 border border-white/20 focus:border-emerald-400 rounded-3xl px-6 py-5 outline-none">
+            </div>
+            
+            <button type="submit" 
+                    class="w-full h-16 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold text-xl rounded-3xl hover:brightness-110">
+              ADD GOAL
+            </button>
+          </form>
+        </div>
+
+        <!-- Your Goals -->
+        <div class="lg:col-span-7 glass rounded-3xl p-8 card-hover animate-in">
+          <h2 class="text-2xl font-semibold mb-8">Your Goals</h2>
+          
+          <div class="space-y-6">
+            {% if goals %}
+              {% for goal in goals %}
+              <div class="glass rounded-3xl p-7 card-hover {% if goal.completed %}opacity-75{% endif %}">
+                <div class="flex justify-between items-start">
+                  <div class="flex-1">
+                    <h3 class="font-semibold text-xl">{{ goal.name }}</h3>
+                    <p class="text-white/60 text-sm mt-1">
+                      Target: <strong>{{ goal.target_value }} {{ goal.target_type }}</strong>
+                    </p>
+                    {% if goal.due_date %}
+                    <p class="text-white/60 text-sm">Due: {{ goal.due_date }}</p>
+                    {% endif %}
+                  </div>
+                  
+                  <div class="text-right">
+                    <div class="text-4xl font-semibold text-emerald-400">{{ goal.progress }}%</div>
+                  </div>
+                </div>
+                
+                <div class="mt-6 h-3 bg-white/10 rounded-full overflow-hidden">
+                  <div class="progress-bar h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full" 
+                       style="width: {{ goal.progress }}%"></div>
+                </div>
+                
+                {% if not goal.completed %}
+                <div class="mt-6">
+                  <button type="button" 
+                          onclick="completeGoal({{ goal.id }})"
+                          class="px-8 py-3 bg-white/10 hover:bg-emerald-500 hover:text-white rounded-3xl text-sm font-medium">
+                    Mark as Complete
+                  </button>
+                </div>
+                {% else %}
+                <div class="mt-4 text-emerald-400 text-sm font-medium flex items-center gap-2">
+                  ✓ Goal Completed
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="text-center py-20 text-white/50">
+                No goals yet. Create one above to stay motivated.
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="mt-16 text-center text-white/40 text-sm">
+      Goals turn dreams into daily habits
+    </footer>
+  </div>
+
+  <script>
+    tailwind.config = { content: ["*"] };
+    
+    function completeGoal(goalId) {
+      if (confirm("Mark this goal as complete?")) {
+        fetch(`/goal/complete/${goalId}`, { method: 'POST' })
+          .then(response => {
+            if (response.ok) {
+              location.reload();
+            } else {
+              alert("Failed to complete goal");
+            }
+          })
+          .catch(() => alert("Error completing goal"));
+      }
+    }
+  </script>
+</body>
+</html>
