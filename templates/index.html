@@ -322,8 +322,14 @@
             const sessionsEl = document.getElementById('total-sessions');
             const minutesEl = document.getElementById('total-minutes');
             
-            if (sessionsEl) animateCounter(sessionsEl, parseInt(sessionsEl.textContent) || 42);
-            if (minutesEl) animateCounter(minutesEl, parseInt(minutesEl.textContent) || 1240);
+            if (sessionsEl) {
+              const sessionsTarget = Number(sessionsEl.textContent.trim());
+              animateCounter(sessionsEl, Number.isFinite(sessionsTarget) ? sessionsTarget : 0);
+            }
+            if (minutesEl) {
+              const minutesTarget = Number(minutesEl.textContent.trim());
+              animateCounter(minutesEl, Number.isFinite(minutesTarget) ? minutesTarget : 0);
+            }
             
             observer.disconnect();
           }
